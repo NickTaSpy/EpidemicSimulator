@@ -11,8 +11,8 @@
 /[Mm]emoryCaptures/
 
 # Mapbox Configuration (unsafe)
-/[Aa]ssets/Resources/MapboxConfiguration.txt
-/[Aa]ssets/Resources/MapboxConfiguration.txt.meta
+/[Aa]ssets/Resources/Mapbox/MapboxConfiguration.txt.meta
+/[Aa]ssets/Resources/Mapbox/MapboxConfiguration.txt
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
