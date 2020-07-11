@@ -47,6 +47,7 @@ namespace Epsim.Profile
             for (int i = 0; i < AgeDistribution.Length; i++)
             {
                 AgeDistribution[i].RatioSlider.value = profile.PopulationProfile.AgeDistribution.Values[i];
+                AgeDistribution[i].Modifier.text = profile.PopulationProfile.AgeInfectabilityModifiers[i].ToString();
             }
             OnAgeDistributionChanged();
 
@@ -75,6 +76,14 @@ namespace Epsim.Profile
             for (int i = 0; i < AgeDistribution.Length; i++)
             {
                 AgeDistribution[i].Text.text = percentages[i].ToString("P2", CultureInfo.InvariantCulture);
+            }
+        }
+
+        public void OnAgeInfectionModifierChanged()
+        {
+            for (int i = 0; i < AgeDistribution.Length; i++)
+            {
+                ClampField(AgeDistribution[i].Modifier, 1f, 0.001f, 100f);
             }
         }
 

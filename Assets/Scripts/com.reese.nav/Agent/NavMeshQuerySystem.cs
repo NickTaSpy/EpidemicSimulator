@@ -61,7 +61,7 @@ namespace Reese.Nav
                 var query = new NavMeshQuery(
                     NavMeshWorld.GetDefaultWorld(),
                     Allocator.Persistent,
-                    NavConstants.PATH_NODE_MAX
+                    100000
                 );
 
                 queryList.Add(query);

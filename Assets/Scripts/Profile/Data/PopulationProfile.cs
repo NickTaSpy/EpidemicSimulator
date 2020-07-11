@@ -19,6 +19,11 @@ namespace Epsim.Profile.Data
         public Pyramid AgeDistribution;
 
         /// <summary>
+        /// Infectability probability modifier for each age group.
+        /// </summary>
+        public List<float> AgeInfectabilityModifiers;
+
+        /// <summary>
         /// Percentage of people who are males.
         /// </summary>
         public float MalePercent;
@@ -28,10 +33,11 @@ namespace Epsim.Profile.Data
 
         }
 
-        public PopulationProfile(int population, Pyramid ageDistribution, float malePercent)
+        public PopulationProfile(int population, Pyramid ageDistribution, List<float> ageInfectabilityModifiers, float malePercent)
         {
             Population = population;
             AgeDistribution = ageDistribution;
+            AgeInfectabilityModifiers = ageInfectabilityModifiers;
             MalePercent = malePercent;
         }
     }

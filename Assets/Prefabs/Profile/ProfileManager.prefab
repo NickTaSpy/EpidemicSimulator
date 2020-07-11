@@ -47,7 +47,7 @@ MonoBehaviour:
   ProfileUI: {fileID: 0}
   DefaultProfile:
     PopulationProfile:
-      Population: 5000
+      Population: 40000
       AgeDistribution:
         Ranges:
         - From: 0
@@ -75,6 +75,15 @@ MonoBehaviour:
         - 0
         - 0
         - 0
+      AgeInfectabilityModifiers:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
       MalePercent: 50
     ScheduleProfile:
       WorkStart: 8
@@ -91,6 +100,7 @@ MonoBehaviour:
       AgeDistribution:
         Ranges: []
         Values: []
+      AgeInfectabilityModifiers: []
       MalePercent: 0
     ScheduleProfile:
       WorkStart: 0

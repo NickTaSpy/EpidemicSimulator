@@ -1532,11 +1532,6 @@ PrefabInstance:
       propertyPath: HumanCountUI
       value: 
       objectReference: {fileID: 3493893029714345359}
-    - target: {fileID: 5373450620065130363, guid: 1572b3b3bf6904f4bae2c89b570bc44d,
-        type: 3}
-      propertyPath: DefaultProfile.PopulationProfile.Population
-      value: 40000
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1572b3b3bf6904f4bae2c89b570bc44d, type: 3}
 --- !u!1001 &8390251295712082308
@@ -1848,12 +1843,7 @@ PrefabInstance:
     - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000040308525
-      objectReference: {fileID: 0}
-    - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.000007405877
+      value: 0.0010011366
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290574951585, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
@@ -1868,11 +1858,6 @@ PrefabInstance:
     - target: {fileID: 8692944290580678811, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8692944290580678811, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
-        type: 3}
-      propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290731857002, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
@@ -1903,11 +1888,6 @@ PrefabInstance:
     - target: {fileID: 8692944290784520097, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8692944290784520097, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
-        type: 3}
-      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290786359322, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
@@ -1967,7 +1947,7 @@ PrefabInstance:
     - target: {fileID: 8939792508510438568, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
         type: 3}
       propertyPath: MaxTravelDistance
-      value: 200
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 8939792508510438569, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
         type: 3}

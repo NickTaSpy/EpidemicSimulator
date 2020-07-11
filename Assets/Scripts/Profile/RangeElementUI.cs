@@ -14,5 +14,6 @@ namespace Epsim.Profile
         public Range Range;
         public Slider RatioSlider;
         public TMP_Text Text;
+        public TMP_InputField Modifier;
     }
 }

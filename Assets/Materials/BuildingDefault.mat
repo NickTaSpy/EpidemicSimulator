@@ -63,7 +63,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_97B0E1A7: 0.25
+    - Vector1_97B0E1A7: 1
     - _AOEnable: 0
     - _AOPower: 1
     - _AOuv: 0

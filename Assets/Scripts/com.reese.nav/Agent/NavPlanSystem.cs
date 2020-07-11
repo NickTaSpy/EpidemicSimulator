@@ -77,6 +77,7 @@ namespace Reese.Nav
                     if (status != PathQueryStatus.Success)
                     {
                         commandBuffer.RemoveComponent<NavPlanning>(entityInQueryIndex, entity);
+                        Debug.LogWarning("Removed NavPlanning component because path failed.");
                         return;
                     }
 
