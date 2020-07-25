@@ -57,7 +57,7 @@ namespace Epsim
         {
             foreach (var element in Elements)
             {
-                Destroy(element.Button);
+                Destroy(element.Button.gameObject);
             }
 
             Elements.Clear();

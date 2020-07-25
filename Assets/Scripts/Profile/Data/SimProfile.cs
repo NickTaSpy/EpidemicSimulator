@@ -11,6 +11,8 @@ namespace Epsim.Profile.Data
     [Serializable]
     public class SimProfile
     {
+        public string Name;
+
         public PopulationProfile PopulationProfile;
 
         public ScheduleProfile ScheduleProfile;
@@ -24,8 +26,9 @@ namespace Epsim.Profile.Data
             VirusProfile = new VirusProfile();
         }
 
-        public SimProfile(PopulationProfile populationProfile, ScheduleProfile scheduleProfile, VirusProfile virusProfile)
+        public SimProfile(string name, PopulationProfile populationProfile, ScheduleProfile scheduleProfile, VirusProfile virusProfile)
         {
+            Name = name;
             PopulationProfile = populationProfile;
             ScheduleProfile = scheduleProfile;
             VirusProfile = virusProfile;

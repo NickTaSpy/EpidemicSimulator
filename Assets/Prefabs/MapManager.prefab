@@ -47,4 +47,4 @@ MonoBehaviour:
   ProfileManager: {fileID: 0}
   BuildingManager: {fileID: 0}
   HomeWorkPairsCount: {fileID: 0}
-  MaxTravelDistance: 200
+  MaxTravelDistance: 500

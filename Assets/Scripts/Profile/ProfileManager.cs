@@ -15,6 +15,8 @@ namespace Epsim.Profile
         [SerializeField] private SimProfile DefaultProfile;
         [SerializeField] private SimProfile SelectedProfile;
 
+        [SerializeField] private TMP_InputField ProfileName;
+
         [SerializeField] private TMP_Text HumanCountUI;
 
         private string ProfileFolder;
@@ -55,6 +57,18 @@ namespace Epsim.Profile
             SelectedProfile = profile;
             ProfileUI.UpdateProfile(profile);
             HumanCountUI.text = profile.PopulationProfile.Population.ToString();
+            ProfileName.text = profile.Name;
+        }
+
+        public void SaveProfile()
+        {
+            if (ProfileName.text == "Default")
+            {
+                return;
+            }
+
+            SelectedProfile.Save($"{ProfileFolder}/{ProfileName.text}.json");
+            ReloadAllProfiles();
         }
     }
 }

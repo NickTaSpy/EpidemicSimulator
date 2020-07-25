@@ -46,6 +46,7 @@ MonoBehaviour:
   ProfilesListUI: {fileID: 0}
   ProfileUI: {fileID: 0}
   DefaultProfile:
+    Name: Default
     PopulationProfile:
       Population: 40000
       AgeDistribution:
@@ -95,6 +96,7 @@ MonoBehaviour:
       ReproductionMin: 2
       ReproductionMax: 2
   SelectedProfile:
+    Name: 
     PopulationProfile:
       Population: 0
       AgeDistribution:
@@ -111,4 +113,5 @@ MonoBehaviour:
       RecoveryProbability: 0
       ReproductionMin: 0
       ReproductionMax: 0
+  ProfileName: {fileID: 0}
   HumanCountUI: {fileID: 0}

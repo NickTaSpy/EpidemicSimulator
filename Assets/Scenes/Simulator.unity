@@ -658,6 +658,18 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
+--- !u!114 &1363914125 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1363914125, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
+    type: 3}
+  m_PrefabInstance: {fileID: 8692944290659977486}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1368304145 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8692944289308795679, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
@@ -1224,26 +1236,6 @@ PrefabInstance:
       propertyPath: _vectorData._layerProperty.vectorSubLayers.Array.data[3].materialOptions.customStyleOptions.materials.Array.data[1].Materials.Array.data[0]
       value: 
       objectReference: {fileID: 1315698939}
-    - target: {fileID: 38721313898394728, guid: 07952c4826b87c448b8cf285b924918b,
-        type: 3}
-      propertyPath: _options.extentOptions.defaultExtents.rangeAroundCenterOptions.west
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 38721313898394728, guid: 07952c4826b87c448b8cf285b924918b,
-        type: 3}
-      propertyPath: _options.extentOptions.defaultExtents.rangeAroundCenterOptions.south
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 38721313898394728, guid: 07952c4826b87c448b8cf285b924918b,
-        type: 3}
-      propertyPath: _options.extentOptions.defaultExtents.rangeAroundCenterOptions.east
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 38721313898394728, guid: 07952c4826b87c448b8cf285b924918b,
-        type: 3}
-      propertyPath: _options.extentOptions.defaultExtents.rangeAroundCenterOptions.north
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 38721313898394730, guid: 07952c4826b87c448b8cf285b924918b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1529,6 +1521,11 @@ PrefabInstance:
       objectReference: {fileID: 1810556329}
     - target: {fileID: 5373450620065130363, guid: 1572b3b3bf6904f4bae2c89b570bc44d,
         type: 3}
+      propertyPath: ProfileName
+      value: 
+      objectReference: {fileID: 1363914125}
+    - target: {fileID: 5373450620065130363, guid: 1572b3b3bf6904f4bae2c89b570bc44d,
+        type: 3}
       propertyPath: HumanCountUI
       value: 
       objectReference: {fileID: 3493893029714345359}
@@ -1620,6 +1617,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1189098180, guid: e4e8a127b8d3d634b9e2c189e84f98bc, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1562403627}
     - target: {fileID: 8692944288849615604, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1843,7 +1844,7 @@ PrefabInstance:
     - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0010011366
+      value: 0.0010084481
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290574951585, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
@@ -1944,11 +1945,6 @@ PrefabInstance:
       propertyPath: HomeWorkPairsCount
       value: 
       objectReference: {fileID: 281705690}
-    - target: {fileID: 8939792508510438568, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
-        type: 3}
-      propertyPath: MaxTravelDistance
-      value: 500
-      objectReference: {fileID: 0}
     - target: {fileID: 8939792508510438569, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
         type: 3}
       propertyPath: m_LocalPosition.x

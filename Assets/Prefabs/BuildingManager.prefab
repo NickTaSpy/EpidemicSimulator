@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d614b238999e7345b42f1f1e91655f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EntranceMaxDistance: 100
   Map: {fileID: 0}
   TileBuildings: {fileID: 11400000, guid: af49550f22d6de14d9f3e9045fcf1b7b, type: 2}
   BuildingCountUI: {fileID: 0}
