@@ -28,7 +28,7 @@ namespace Epsim.Human
             var deltaTime = Time.DeltaTime;
             DateTime.AddSeconds(deltaTime);
 
-            var commandBuffer = Barrier.CreateCommandBuffer().ToConcurrent();
+            var commandBuffer = Barrier.CreateCommandBuffer().AsParallelWriter();
             var randomArray = World.GetExistingSystem<RandomSystem>().RandomArray;
 
             Entities

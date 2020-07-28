@@ -33,7 +33,7 @@ namespace Epsim.Human
                 return;
             }
 
-            var commandBuffer = Barrier.CreateCommandBuffer().ToConcurrent();
+            var commandBuffer = Barrier.CreateCommandBuffer().AsParallelWriter();
 
             var buildingToPosition = BuildingToPosition;
             var pairs = Pairs;

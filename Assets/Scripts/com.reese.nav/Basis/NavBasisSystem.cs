@@ -1,15 +1,14 @@
 ﻿using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
-using Unity.Collections;
-using BuildPhysicsWorld = Unity.Physics.Systems.BuildPhysicsWorld;
+using Unity.Physics.Systems;
 
 namespace Reese.Nav
 {
     /// <summary>Pretty much only exists to create a default basis and ensure
     /// that parent-child relationships are maintained in lieu of
     /// Unity.Physics' efforts to destroy them.</summary>
-    [UpdateAfter(typeof(BuildPhysicsWorld))]
+    [UpdateAfter(typeof(TransformSystemGroup))]
     public class NavBasisSystem : SystemBase
     {
         /// <summary>The default basis that all other bases and basis-lacking
@@ -31,7 +30,7 @@ namespace Reese.Nav
 
         protected override void OnUpdate()
         {
-            var commandBuffer = barrier.CreateCommandBuffer().ToConcurrent();
+            var commandBuffer = barrier.CreateCommandBuffer().AsParallelWriter();
 
             // Below job is needed because Unity.Physics removes the Parent
             // component for dynamic bodies.

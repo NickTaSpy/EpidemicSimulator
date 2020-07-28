@@ -38,13 +38,23 @@
         /// allocated.</summary>
         public const int JUMPABLE_SURFACE_MAX = 30;
 
+        /// <summary>Upper limit on the path node pool size for each
+        /// NavMeshQuery created in the NavMeshQuerySystem. May need to be
+        /// increased if an OutOfNodes error arises while finding a path.
+        /// </summary>
+        public const int NAV_MESH_QUERY_NODE_MAX = 10000;
+
+        /// <summary>The initial capacity of the map tracking agents that need
+        /// a surface.</summary>
+        public const int NEEDS_SURFACE_MAP_SIZE = 1000;
+
         /// <summary>Upper limit on a given path buffer. Exceeding this will
         /// merely result in heap memory blocks being allocated.</summary>
         public const int PATH_NODE_MAX = 1000;
 
         /// <summary>Upper limit on the search area size during path planning.
         /// </summary>
-        public const int PATH_SEARCH_MAX = 1000000;
+        public const int PATH_SEARCH_MAX = int.MaxValue;
 
         /// <summary>Upper limit on the number of raycasts to attempt in
         /// searching for a surface below the NavAgent. Exceeding this implies

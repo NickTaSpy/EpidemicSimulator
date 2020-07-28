@@ -33,7 +33,7 @@ namespace Epsim.Human
             var deltaTime = Time.DeltaTime;
             DateTime.AddSeconds(deltaTime);
 
-            var commandBuffer = Barrier.CreateCommandBuffer().ToConcurrent();
+            var commandBuffer = Barrier.CreateCommandBuffer().AsParallelWriter();
 
             var buildingAssignmentSystem = EntityManager.World.GetOrCreateSystem<BuildingAssignmentSystem>();
             var buildingToPosition = buildingAssignmentSystem.BuildingToPosition;
