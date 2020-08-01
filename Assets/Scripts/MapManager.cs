@@ -157,17 +157,36 @@ namespace Epsim
             }
 
             var pairs = new NativeList<int2>(population, Allocator.Persistent);
+            var uniqueHouses = new HashSet<float2>();
+            var uniqueJobs = new HashSet<float2>();
+
             for (int i = 0; i < houses.Count; i++)
             {
-                if (houseCapacity[i] == 0)
+                float2 house = buildingAssignmentSystem.BuildingToPosition[i];
+
+                if (uniqueHouses.Contains(house))
                     continue;
+
+                if (houseCapacity[i] == 0)
+                {
+                    uniqueHouses.Add(house);
+                    continue;
+                }
 
                 for (int j = 0; j < jobs.Count; j++)
                 {
-                    float2 house = buildingAssignmentSystem.BuildingToPosition[i];
                     float2 job = buildingAssignmentSystem.BuildingToPosition[j];
 
-                    if (jobCapacity[j] == 0 || math.distance(house, job) > MaxTravelDistance)
+                    if (uniqueJobs.Contains(job))
+                        continue;
+
+                    if (jobCapacity[j] == 0)
+                    {
+                        uniqueJobs.Add(job);
+                        continue;
+                    }
+
+                    if (math.distance(house, job) > MaxTravelDistance)
                         continue;
 
                     NavMeshPath path = new NavMeshPath();
