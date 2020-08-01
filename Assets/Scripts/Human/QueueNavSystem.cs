@@ -14,7 +14,7 @@ namespace Epsim.Human
     [UpdateAfter(typeof(ScheduleSystem))]
     public class QueueNavSystem : SystemBase
     {
-        private const int EntitiesPerFrame = 11;
+        private const int EntitiesPerFrame = 10;
 
         private EntityCommandBufferSystem ECB;
 
@@ -45,7 +45,7 @@ namespace Epsim.Human
                     .WithName("QueueNavJob")
                     .WithReadOnly(entities)
                     .WithReadOnly(dests)
-                    .WithNativeDisableParallelForRestriction(commandBuffer)
+                    .WithNativeDisableContainerSafetyRestriction(commandBuffer)
                     .WithCode(() =>
                     {
                         commandBuffer.RemoveComponent<QueuedForDestination>(i, entities[i]);
@@ -56,10 +56,9 @@ namespace Epsim.Human
                     })
                     .WithBurst()
                     .Schedule(Dependency);
-
-                ECB.AddJobHandleForProducer(handles[i]);
             }
 
+            ECB.AddJobHandleForProducer(JobHandle.CombineDependencies(handles));
             JobHandle.CompleteAll(handles);
 
             handles.Dispose();
