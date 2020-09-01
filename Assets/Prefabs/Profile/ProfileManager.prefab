@@ -85,7 +85,7 @@ MonoBehaviour:
       - 1
       - 1
       - 1
-      MalePercent: 50
+      MalePercent: 0.5
     ScheduleProfile:
       WorkStart: 8
       WorkDurationHours: 8

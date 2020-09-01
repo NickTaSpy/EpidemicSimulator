@@ -18,6 +18,7 @@ namespace Epsim.Profile
         // Population
         [SerializeField] private TMP_InputField Population;
         [SerializeField] private RangeElementUI[] AgeDistribution;
+        [SerializeField] private Slider MalePercent;
 
         // Schedule
         [SerializeField] private Slider WorkStart;
@@ -43,6 +44,7 @@ namespace Epsim.Profile
         {
             // Population
             Population.text = profile.PopulationProfile.Population.ToString();
+            MalePercent.value = profile.PopulationProfile.MalePercent;
 
             for (int i = 0; i < AgeDistribution.Length; i++)
             {

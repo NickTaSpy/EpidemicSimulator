@@ -11,10 +11,9 @@ using UnityEngine.Rendering;
 
 namespace Epsim.Human
 {
-    [UpdateAfter(typeof(ScheduleSystem))]
     public class QueueNavSystem : SystemBase
     {
-        private const int EntitiesPerFrame = 10;
+        private const int EntitiesPerFrame = 2;
 
         private EntityCommandBufferSystem ECB;
 
@@ -30,12 +29,13 @@ namespace Epsim.Human
 
         protected override void OnUpdate()
         {
+            // Process entities.
             var query = GetEntityQuery(QueryDesc);
             var entities= query.ToEntityArray(Allocator.TempJob);
             var dests = query.ToComponentDataArray<QueuedForDestination>(Allocator.TempJob);
 
             var commandBuffer = ECB.CreateCommandBuffer().AsParallelWriter();
-
+            
             int jobCount = math.min(entities.Length, EntitiesPerFrame + 1);
             var handles = new NativeArray<JobHandle>(jobCount, Allocator.TempJob);
 

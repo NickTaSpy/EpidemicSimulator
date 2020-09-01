@@ -98,6 +98,7 @@ namespace Epsim
 
                 BuildingManager.CalculateEntrances();
                 BuildingManager.UpdateBuildingCountUI();
+                EntityManager.World.GetOrCreateSystem<HumanDataAssignmentSystem>().SimProfile = ProfileManager.Profile;
                 int pop = ProfileManager.Profile.PopulationProfile.Population;
                 int pairCount = InitBuildingAssignmentSystem(pop, buildingHeight);
                 SpawnHumans(new float3(hit.position.x, hit.position.y + 1, hit.position.z), math.clamp(pop, 0, pairCount));
@@ -111,15 +112,6 @@ namespace Epsim
             SpawnSystem.Enqueue(new Spawn()
                 .WithPrefab(prefabEntity)
                 .WithComponentList(
-                    new HumanData
-                    {
-                        Male = true,
-                        Age = 40,
-                        InfectionProbability = 0.1f,
-                        RecoveryProbability = 0.1f,
-                        Status = Status.Susceptible,
-                        TransmissionsRemaining = 4
-                    },
                     new NavAgent
                     {
                         JumpDegrees = 45,
@@ -144,6 +136,8 @@ namespace Epsim
             buildingAssignmentSystem.BuildingToPosition = BuildingManager.GetEntrancesAsNativeHashMap();
             buildingAssignmentSystem.BuildingHeight = buildingHeight;
 
+            //FilterOutSimilar(buildingAssignmentSystem.BuildingToPosition, 0.1f);
+
             var houses = new List<int>();
             var houseCapacity = new List<int>();
             var jobs = new List<int>();
@@ -157,47 +151,36 @@ namespace Epsim
             }
 
             var pairs = new NativeList<int2>(population, Allocator.Persistent);
-            var uniqueHouses = new HashSet<float2>();
-            var uniqueJobs = new HashSet<float2>();
 
             for (int i = 0; i < houses.Count; i++)
             {
+                if (pairs.Length == population)
+                    break;
+
                 float2 house = buildingAssignmentSystem.BuildingToPosition[i];
 
-                if (uniqueHouses.Contains(house))
-                    continue;
-
                 if (houseCapacity[i] == 0)
-                {
-                    uniqueHouses.Add(house);
                     continue;
-                }
 
                 for (int j = 0; j < jobs.Count; j++)
                 {
                     float2 job = buildingAssignmentSystem.BuildingToPosition[j];
 
-                    if (uniqueJobs.Contains(job))
-                        continue;
-
                     if (jobCapacity[j] == 0)
-                    {
-                        uniqueJobs.Add(job);
                         continue;
-                    }
 
                     if (math.distance(house, job) > MaxTravelDistance)
                         continue;
 
-                    NavMeshPath path = new NavMeshPath();
-                    NavMesh.CalculatePath(new Vector3(house.x, buildingHeight, house.y), new Vector3(job.x, buildingHeight, job.y), NavMesh.AllAreas, path);
-
-                    if (path.status != NavMeshPathStatus.PathComplete)
-                        continue;
+                    //if (!IsPathValid(new Vector3(house.x, buildingHeight, house.y), new Vector3(job.x, buildingHeight, job.y)))
+                    //    continue;
 
                     houseCapacity[i] -= 1;
                     jobCapacity[j] -= 1;
                     pairs.Add(new int2(i, j));
+
+                    if (houseCapacity[i] == 0)
+                        break;
 
                     if (pairs.Length == population)
                         break;
@@ -244,6 +227,36 @@ namespace Epsim
                 list[k] = list[n];
                 list[n] = value;
             }
+        }
+
+        private bool IsPathValid(Vector3 pos1, Vector3 pos2)
+        {
+            NavMeshPath path = new NavMeshPath();
+            NavMesh.CalculatePath(pos1, pos2, NavMesh.AllAreas, path);
+
+            return path.status == NavMeshPathStatus.PathComplete;
+        }
+
+        private void FilterOutSimilar(NativeHashMap<int, float2> keyValues, float minDistance)
+        {
+            var keyValuesArray = keyValues.GetKeyValueArrays(Allocator.Temp);
+
+            for (int i = 0; i < keyValuesArray.Length; i++)
+            {
+                for (int j = 0; j < keyValuesArray.Length; j++)
+                {
+                    if (keyValuesArray.Keys[j] == -1 || keyValuesArray.Keys[i] == keyValuesArray.Keys[j])
+                        continue;
+
+                    if (math.distance(keyValuesArray.Values[j], keyValuesArray.Values[j]) <= minDistance)
+                    {
+                        keyValuesArray.Keys[j] = -1;
+                        keyValues.Remove(keyValuesArray.Keys[j]);
+                    }
+                }
+            }
+
+            keyValuesArray.Dispose();
         }
     }
 }

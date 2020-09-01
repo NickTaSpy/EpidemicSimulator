@@ -17,6 +17,29 @@ namespace Epsim.Profile.Data
             Ranges = ranges;
             Values = values;
         }
+
+        public float[] CalculatePercentagesFromRatios()
+        {
+            var sum = Values.Sum();
+            var results = new float[Values.Count];
+
+            if (sum == 0)
+            {
+                for (int i = 0; i < Values.Count; i++)
+                {
+                    results[i] = 1f / 8f;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Values.Count; i++)
+                {
+                    results[i] = Values[i] / sum;
+                }
+            }
+
+            return results;
+        }
     }
 
     [Serializable]

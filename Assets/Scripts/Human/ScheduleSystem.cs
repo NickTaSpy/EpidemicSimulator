@@ -25,13 +25,14 @@ namespace Epsim.Human
 
         protected override void OnStartRunning()
         {
-            DateTime = DateTime.Today.AddHours(6);
+            DateTime = DateTime.Today.AddHours(8);
         }
 
         protected override void OnUpdate()
         {
             var deltaTime = Time.DeltaTime;
             DateTime.AddSeconds(deltaTime);
+            var time = DateTime.TimeOfDay.TotalMilliseconds;
 
             var commandBuffer = Barrier.CreateCommandBuffer().AsParallelWriter();
 
@@ -43,17 +44,30 @@ namespace Epsim.Human
                 .WithName("ScheduleMainJob")
                 .WithReadOnly(buildingToPosition)
                 .WithAll<HumanData>()
-                .WithNone<NavNeedsDestination>()
-                .WithNone<QueuedForDestination>()
-                .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, in HumanBuildingData buildingData) =>
+                .WithNone<NavNeedsDestination, QueuedForDestination>()
+                .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, ref HumanBuildingData buildingData, in HumanScheduleData humanScheduleData) =>
                 {
-                    var workPos = buildingToPosition[buildingData.Work];
-                    commandBuffer.AddComponent(entityInQueryIndex, human, new QueuedForDestination
-                    {
-                        Destination = new float3(workPos.x, buildingHeight, workPos.y)
-                    });
+                    if (buildingData.Location == Location.Moving)
+                        return;
 
-                    commandBuffer.RemoveComponent<HumanData>(entityInQueryIndex, human); //TEMP
+                    if (buildingData.Location == Location.Residence && time >= humanScheduleData.WorkStart) // Go to work.
+                    {
+                        var workPos = buildingToPosition[buildingData.Work];
+                        commandBuffer.AddComponent(entityInQueryIndex, human, new QueuedForDestination
+                        {
+                            Destination = new float3(workPos.x, buildingHeight, workPos.y)
+                        });
+                    }
+                    else if (buildingData.Location == Location.Work && time >= humanScheduleData.WorkEnd) // Go to residence.
+                    {
+                        var housePos = buildingToPosition[buildingData.Residence];
+                        commandBuffer.AddComponent(entityInQueryIndex, human, new QueuedForDestination
+                        {
+                            Destination = new float3(housePos.x, buildingHeight, housePos.y)
+                        });
+                    }
+
+                    //commandBuffer.RemoveComponent<HumanData>(entityInQueryIndex, human); //TEMP
                 })
                 .ScheduleParallel();
 

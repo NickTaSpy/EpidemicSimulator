@@ -11,7 +11,6 @@ using UnityEngine;
 
 namespace Epsim.Human
 {
-    [DisableAutoCreation]
     public class HumanSystem : SystemBase
     {
         private EntityCommandBufferSystem Barrier => World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
@@ -20,6 +19,7 @@ namespace Epsim.Human
 
         protected override void OnCreate()
         {
+            Enabled = false;
             DateTime = DateTime.Today.AddHours(6);
         }
 
