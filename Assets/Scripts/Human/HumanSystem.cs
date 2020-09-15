@@ -25,11 +25,7 @@ namespace Epsim.Human
 
         protected override void OnUpdate()
         {
-            var deltaTime = Time.DeltaTime;
-            DateTime.AddSeconds(deltaTime);
-
             var commandBuffer = Barrier.CreateCommandBuffer().AsParallelWriter();
-            var randomArray = World.GetExistingSystem<RandomSystem>().RandomArray;
 
             Entities
                 .WithName("HumanMainJob")
@@ -37,25 +33,7 @@ namespace Epsim.Human
                 .WithAll<HumanData, NavAgent>()
                 .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, in Translation translation) =>
                 {
-                    var random = randomArray[nativeThreadIndex];
-
-                    if (translation.Value.x > 27f && translation.Value.x < 32f)
-                    {
-                        commandBuffer.AddComponent(entityInQueryIndex, human, new NavNeedsDestination
-                        {
-                            Destination = new float3(0f, 0.1f, 0f)
-                        });
-                    }
-                    else
-                    {
-                        commandBuffer.AddComponent(entityInQueryIndex, human, new NavNeedsDestination
-                        {
-                            Destination = new float3(30f, 0.1f, 30f),
-                            Teleport = false
-                        });
-                    }
-
-                    randomArray[nativeThreadIndex] = random;
+                    
                 })
                 .ScheduleParallel();
 

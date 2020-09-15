@@ -16,11 +16,12 @@ namespace Epsim.Human
     {
         private DateTime DateTime;
 
-        private EntityCommandBufferSystem Barrier => World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        private EntityCommandBufferSystem ECB;
 
         protected override void OnCreate()
         {
             Enabled = false;
+            ECB = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
         protected override void OnStartRunning()
@@ -34,7 +35,7 @@ namespace Epsim.Human
             DateTime.AddSeconds(deltaTime);
             var time = DateTime.TimeOfDay.TotalMilliseconds;
 
-            var commandBuffer = Barrier.CreateCommandBuffer().AsParallelWriter();
+            var commandBuffer = ECB.CreateCommandBuffer().AsParallelWriter();
 
             var buildingAssignmentSystem = EntityManager.World.GetOrCreateSystem<BuildingAssignmentSystem>();
             var buildingToPosition = buildingAssignmentSystem.BuildingToPosition;
@@ -71,7 +72,7 @@ namespace Epsim.Human
                 })
                 .ScheduleParallel();
 
-            Barrier.AddJobHandleForProducer(Dependency);
+            ECB.AddJobHandleForProducer(Dependency);
         }
     }
 }
