@@ -32,7 +32,7 @@ namespace Epsim.Human
         protected override void OnUpdate()
         {
             var deltaTime = Time.DeltaTime;
-            DateTime.AddSeconds(deltaTime);
+            DateTime = DateTime.AddSeconds(deltaTime);
             var time = DateTime.TimeOfDay.TotalMilliseconds;
 
             var commandBuffer = ECB.CreateCommandBuffer().AsParallelWriter();
@@ -46,26 +46,43 @@ namespace Epsim.Human
                 .WithReadOnly(buildingToPosition)
                 .WithAll<HumanData>()
                 .WithNone<NavNeedsDestination, QueuedForDestination>()
-                .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, ref HumanBuildingData buildingData, in HumanScheduleData humanScheduleData) =>
+                .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, ref HumanBuildingData buildingData, in HumanScheduleData humanScheduleData, in Translation translation) =>
                 {
-                    if (buildingData.Location == Location.Moving)
-                        return;
+                    var workPos = buildingToPosition[buildingData.Work];
+                    var housePos = buildingToPosition[buildingData.Residence];
 
-                    if (buildingData.Location == Location.Residence && time >= humanScheduleData.WorkStart) // Go to work.
+                    if (buildingData.Location == Location.Moving)
                     {
-                        var workPos = buildingToPosition[buildingData.Work];
+                        // Detect if arrived at location.
+                        if (workPos.x == translation.Value.x && workPos.y == translation.Value.z) // Arrived at work.
+                        {
+                            buildingData.Location = Location.Work;
+                        }
+                        else if (housePos.x == translation.Value.x && housePos.y == translation.Value.z) // Arrived at residence.
+                        {
+                            buildingData.Location = Location.Residence;
+                        }
+                        else // Still moving.
+                        {
+                            return;
+                        }
+                    }
+
+                    if (buildingData.Location == Location.Residence && time >= humanScheduleData.WorkStart && time < humanScheduleData.WorkEnd) // Go to work.
+                    {                        
                         commandBuffer.AddComponent(entityInQueryIndex, human, new QueuedForDestination
                         {
                             Destination = new float3(workPos.x, buildingHeight, workPos.y)
                         });
+                        buildingData.Location = Location.Moving;
                     }
                     else if (buildingData.Location == Location.Work && time >= humanScheduleData.WorkEnd) // Go to residence.
                     {
-                        var housePos = buildingToPosition[buildingData.Residence];
                         commandBuffer.AddComponent(entityInQueryIndex, human, new QueuedForDestination
                         {
                             Destination = new float3(housePos.x, buildingHeight, housePos.y)
                         });
+                        buildingData.Location = Location.Moving;
                     }
 
                     //commandBuffer.RemoveComponent<HumanData>(entityInQueryIndex, human); //TEMP

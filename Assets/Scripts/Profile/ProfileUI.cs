@@ -37,7 +37,8 @@ namespace Epsim.Profile
 
         public void OnSimulate()
         {
-            MapManager.StartNewMap(new Mapbox.Utils.Vector2d(51.5077456, -0.1279042), 16); // London, UK
+            //MapManager.StartNewMap(new Mapbox.Utils.Vector2d(51.5077456, -0.1279042), 16); // London, UK
+            MapManager.StartNewMap(new Mapbox.Utils.Vector2d(49.282222, -123.124390), 16); // Vancouver, CA
         }
 
         public void UpdateProfile(SimProfile profile)

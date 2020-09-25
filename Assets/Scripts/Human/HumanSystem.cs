@@ -13,31 +13,32 @@ namespace Epsim.Human
 {
     public class HumanSystem : SystemBase
     {
-        private EntityCommandBufferSystem Barrier => World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-
-        private DateTime DateTime;
+        private EntityCommandBufferSystem ECB;
 
         protected override void OnCreate()
         {
             Enabled = false;
-            DateTime = DateTime.Today.AddHours(6);
+            ECB = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
         protected override void OnUpdate()
         {
-            var commandBuffer = Barrier.CreateCommandBuffer().AsParallelWriter();
+            var commandBuffer = ECB.CreateCommandBuffer().AsParallelWriter();
 
             Entities
                 .WithName("HumanMainJob")
-                .WithNone<NavNeedsDestination>()
+                .WithNone<NavNeedsDestination, HumanInsideBuildingData>()
                 .WithAll<HumanData, NavAgent>()
-                .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, in Translation translation) =>
+                .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, in HumanBuildingData humanBuildingData) =>
                 {
-                    
+                    if (humanBuildingData.Location != Location.Moving)
+                    {
+                        commandBuffer.AddComponent<HumanInsideBuildingData>(entityInQueryIndex, human);
+                    }
                 })
                 .ScheduleParallel();
 
-            Barrier.AddJobHandleForProducer(Dependency);
+            ECB.AddJobHandleForProducer(Dependency);
         }
     }
 }

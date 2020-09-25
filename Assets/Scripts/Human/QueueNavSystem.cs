@@ -11,9 +11,10 @@ using UnityEngine.Rendering;
 
 namespace Epsim.Human
 {
+    [UpdateAfter(typeof(ScheduleSystem))]
     public class QueueNavSystem : SystemBase
     {
-        private const int EntitiesPerFrame = 2;
+        private const int EntitiesPerFrame = 3;
 
         private EntityCommandBufferSystem ECB;
 
@@ -48,11 +49,11 @@ namespace Epsim.Human
                     .WithNativeDisableContainerSafetyRestriction(commandBuffer)
                     .WithCode(() =>
                     {
-                        commandBuffer.RemoveComponent<QueuedForDestination>(i, entities[i]);
                         commandBuffer.AddComponent(i, entities[i], new NavNeedsDestination
                         {
                             Destination = dests[i].Destination
                         });
+                        commandBuffer.RemoveComponent<QueuedForDestination>(i, entities[i]);
                     })
                     .WithBurst()
                     .Schedule(Dependency);

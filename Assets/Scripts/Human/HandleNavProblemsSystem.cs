@@ -27,6 +27,8 @@ namespace Epsim.Human
                     commandBuffer.DestroyEntity(entityInQueryIndex, human);
                 })
                 .ScheduleParallel();
+
+            ECB.AddJobHandleForProducer(Dependency);
         }
     }
 }
