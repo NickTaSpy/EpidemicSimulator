@@ -11,6 +11,18 @@ using UnityEngine.Rendering;
 
 namespace Epsim.Human
 {
+    public struct DestinationRequest
+    {
+        public Entity Entity;
+        public float3 Destination;
+
+        public DestinationRequest(Entity entity, float3 destination)
+        {
+            Entity = entity;
+            Destination = destination;
+        }
+    }
+
     [UpdateAfter(typeof(ScheduleSystem))]
     public class QueueNavSystem : SystemBase
     {
@@ -18,10 +30,7 @@ namespace Epsim.Human
 
         private EntityCommandBufferSystem ECB;
 
-        private readonly EntityQueryDesc QueryDesc = new EntityQueryDesc
-        {
-            All = new ComponentType[] { ComponentType.ReadOnly<QueuedForDestination>() }
-        };
+        private NativeQueue<DestinationRequest> Queue = new NativeQueue<DestinationRequest>(Allocator.Persistent);
 
         protected override void OnCreate()
         {
@@ -30,30 +39,26 @@ namespace Epsim.Human
 
         protected override void OnUpdate()
         {
-            // Process entities.
-            var query = GetEntityQuery(QueryDesc);
-            var entities= query.ToEntityArray(Allocator.TempJob);
-            var dests = query.ToComponentDataArray<QueuedForDestination>(Allocator.TempJob);
-
             var commandBuffer = ECB.CreateCommandBuffer().AsParallelWriter();
             
-            int jobCount = math.min(entities.Length, EntitiesPerFrame + 1);
+            int jobCount = math.min(Queue.Count, EntitiesPerFrame);
             var handles = new NativeArray<JobHandle>(jobCount, Allocator.TempJob);
+
+            var queue = Queue;
 
             for (int i = 0; i < jobCount; i++)
             {
+                var request = queue.Dequeue();
+
                 handles[i] = Job
                     .WithName("QueueNavJob")
-                    .WithReadOnly(entities)
-                    .WithReadOnly(dests)
                     .WithNativeDisableContainerSafetyRestriction(commandBuffer)
                     .WithCode(() =>
                     {
-                        commandBuffer.AddComponent(i, entities[i], new NavNeedsDestination
+                        commandBuffer.AddComponent(i, request.Entity, new NavNeedsDestination
                         {
-                            Destination = dests[i].Destination
+                            Destination = request.Destination
                         });
-                        commandBuffer.RemoveComponent<QueuedForDestination>(i, entities[i]);
                     })
                     .WithBurst()
                     .Schedule(Dependency);
@@ -63,8 +68,8 @@ namespace Epsim.Human
             JobHandle.CompleteAll(handles);
 
             handles.Dispose();
-            entities.Dispose();
-            dests.Dispose();
         }
+
+        public NativeQueue<DestinationRequest>.ParallelWriter GetParallelQueue() => Queue.AsParallelWriter();
     }
 }

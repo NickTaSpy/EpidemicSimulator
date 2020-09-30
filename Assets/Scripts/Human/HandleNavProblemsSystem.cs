@@ -24,7 +24,8 @@ namespace Epsim.Human
                 .WithAll<NavHasProblem>()
                 .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex) =>
                 {
-                    commandBuffer.DestroyEntity(entityInQueryIndex, human);
+                    //commandBuffer.DestroyEntity(entityInQueryIndex, human);
+                    commandBuffer.RemoveComponent<NavAgent>(entityInQueryIndex, human);
                 })
                 .ScheduleParallel();
 

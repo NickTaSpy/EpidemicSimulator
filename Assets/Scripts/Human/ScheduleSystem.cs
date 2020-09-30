@@ -41,11 +41,14 @@ namespace Epsim.Human
             var buildingToPosition = buildingAssignmentSystem.BuildingToPosition;
             var buildingHeight = buildingAssignmentSystem.BuildingHeight;
 
+            var destinationQueue = EntityManager.World.GetOrCreateSystem<QueueNavSystem>().GetParallelQueue();
+
             Entities
                 .WithName("ScheduleMainJob")
                 .WithReadOnly(buildingToPosition)
                 .WithAll<HumanData>()
-                .WithNone<NavNeedsDestination, QueuedForDestination>()
+                .WithNone<NavNeedsDestination>()
+                .WithNativeDisableContainerSafetyRestriction(destinationQueue)
                 .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, ref HumanBuildingData buildingData, in HumanScheduleData humanScheduleData, in Translation translation) =>
                 {
                     var workPos = buildingToPosition[buildingData.Work];
@@ -69,19 +72,13 @@ namespace Epsim.Human
                     }
 
                     if (buildingData.Location == Location.Residence && time >= humanScheduleData.WorkStart && time < humanScheduleData.WorkEnd) // Go to work.
-                    {                        
-                        commandBuffer.AddComponent(entityInQueryIndex, human, new QueuedForDestination
-                        {
-                            Destination = new float3(workPos.x, buildingHeight, workPos.y)
-                        });
+                    {
+                        destinationQueue.Enqueue(new DestinationRequest(human, new float3(workPos.x, buildingHeight, workPos.y)));
                         buildingData.Location = Location.Moving;
                     }
                     else if (buildingData.Location == Location.Work && time >= humanScheduleData.WorkEnd) // Go to residence.
                     {
-                        commandBuffer.AddComponent(entityInQueryIndex, human, new QueuedForDestination
-                        {
-                            Destination = new float3(housePos.x, buildingHeight, housePos.y)
-                        });
+                        destinationQueue.Enqueue(new DestinationRequest(human, new float3(housePos.x, buildingHeight, housePos.y)));
                         buildingData.Location = Location.Moving;
                     }
 
