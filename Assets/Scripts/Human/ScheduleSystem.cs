@@ -37,11 +37,11 @@ namespace Epsim.Human
 
             var commandBuffer = ECB.CreateCommandBuffer().AsParallelWriter();
 
-            var buildingAssignmentSystem = EntityManager.World.GetOrCreateSystem<BuildingAssignmentSystem>();
+            var buildingAssignmentSystem = World.GetOrCreateSystem<BuildingAssignmentSystem>();
             var buildingToPosition = buildingAssignmentSystem.BuildingToPosition;
             var buildingHeight = buildingAssignmentSystem.BuildingHeight;
 
-            var destinationQueue = EntityManager.World.GetOrCreateSystem<QueueNavSystem>().GetParallelQueue();
+            var destinationQueue = World.GetOrCreateSystem<QueueNavSystem>().GetParallelQueue();
 
             Entities
                 .WithName("ScheduleMainJob")

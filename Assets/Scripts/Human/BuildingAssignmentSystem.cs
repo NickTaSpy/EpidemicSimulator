@@ -20,16 +20,23 @@ namespace Epsim.Human
 
         private EntityCommandBufferSystem Barrier => World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 
+        private ScheduleSystem ScheduleSystem;
+
+        protected override void OnCreate()
+        {
+            ScheduleSystem = World.GetOrCreateSystem<ScheduleSystem>();
+        }
+
         protected override void OnStartRunning()
         {
-            EntityManager.World.GetOrCreateSystem<ScheduleSystem>().Enabled = false;
+            ScheduleSystem.Enabled = false;
         }
 
         protected override void OnUpdate()
         {
             if (!Pairs.IsCreated || Pairs.Length < 2)
             {
-                EntityManager.World.GetExistingSystem<ScheduleSystem>().Enabled = true;
+                ScheduleSystem.Enabled = true;
                 return;
             }
 
@@ -69,13 +76,13 @@ namespace Epsim.Human
                     });
                 })
                 .Schedule();
-
+            
             Barrier.AddJobHandleForProducer(Dependency);
         }
 
         protected override void OnStopRunning()
         {
-            EntityManager.World.GetExistingSystem<ScheduleSystem>().Enabled = true;
+            ScheduleSystem.Enabled = true;
         }
 
         protected override void OnDestroy()
