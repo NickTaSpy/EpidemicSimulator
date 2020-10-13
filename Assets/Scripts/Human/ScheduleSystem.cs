@@ -57,11 +57,11 @@ namespace Epsim.Human
                     if (buildingData.Location == Location.Moving)
                     {
                         // Detect if arrived at location.
-                        if (workPos.x == translation.Value.x && workPos.y == translation.Value.z) // Arrived at work.
+                        if (workPos.x.Approx(translation.Value.x) && workPos.y.Approx(translation.Value.z)) // Arrived at work.
                         {
                             buildingData.Location = Location.Work;
                         }
-                        else if (housePos.x == translation.Value.x && housePos.y == translation.Value.z) // Arrived at residence.
+                        else if (housePos.x.Approx(translation.Value.x) && housePos.y.Approx(translation.Value.z)) // Arrived at residence.
                         {
                             buildingData.Location = Location.Residence;
                         }
