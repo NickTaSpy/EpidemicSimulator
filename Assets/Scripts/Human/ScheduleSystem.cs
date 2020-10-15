@@ -14,6 +14,8 @@ namespace Epsim.Human
 {
     public class ScheduleSystem : SystemBase
     {
+        private const float DestinationCheckRange = 1f;
+
         private DateTime DateTime;
 
         private EntityCommandBufferSystem ECB;
@@ -57,11 +59,11 @@ namespace Epsim.Human
                     if (buildingData.Location == Location.Moving)
                     {
                         // Detect if arrived at location.
-                        if (workPos.x.Approx(translation.Value.x) && workPos.y.Approx(translation.Value.z)) // Arrived at work.
+                        if (workPos.x.Approx(translation.Value.x, DestinationCheckRange) && workPos.y.Approx(translation.Value.z, DestinationCheckRange)) // Arrived at work.
                         {
                             buildingData.Location = Location.Work;
                         }
-                        else if (housePos.x.Approx(translation.Value.x) && housePos.y.Approx(translation.Value.z)) // Arrived at residence.
+                        else if (housePos.x.Approx(translation.Value.x, DestinationCheckRange) && housePos.y.Approx(translation.Value.z, DestinationCheckRange)) // Arrived at residence.
                         {
                             buildingData.Location = Location.Residence;
                         }

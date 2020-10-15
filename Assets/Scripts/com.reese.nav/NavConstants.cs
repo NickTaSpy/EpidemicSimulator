@@ -54,7 +54,7 @@
 
         /// <summary>Upper limit on the search area size during path planning.
         /// </summary>
-        public const int PATH_SEARCH_MAX = 10000;
+        public const int PATH_SEARCH_MAX = 2;
 
         /// <summary>Upper limit on the number of raycasts to attempt in
         /// searching for a surface below the NavAgent. Exceeding this implies
