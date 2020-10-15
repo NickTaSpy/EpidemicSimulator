@@ -31,7 +31,7 @@ namespace Epsim.Human
                 .WithAll<HumanData, NavAgent>()
                 .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, in HumanBuildingData humanBuildingData) =>
                 {
-                    if (humanBuildingData.Location != Location.Moving)
+                    if (humanBuildingData.Location != Location.MovingHome)
                     {
                         commandBuffer.AddComponent<HumanInsideBuildingData>(entityInQueryIndex, human);
                     }

@@ -11,7 +11,8 @@ namespace Epsim.Human
     {
         Residence,
         Work,
-        Moving
+        MovingHome,
+        MovingWork
     }
 
     public struct HumanBuildingData : IComponentData

@@ -39,7 +39,7 @@ namespace UnityTemplateProjects
                 yaw = Mathf.Lerp(yaw, target.yaw, rotationLerpPct);
                 pitch = Mathf.Lerp(pitch, target.pitch, rotationLerpPct);
                 roll = Mathf.Lerp(roll, target.roll, rotationLerpPct);
-                
+
                 x = Mathf.Lerp(x, target.x, positionLerpPct);
                 y = Mathf.Lerp(y, target.y, positionLerpPct);
                 z = Mathf.Lerp(z, target.z, positionLerpPct);
@@ -51,7 +51,7 @@ namespace UnityTemplateProjects
                 t.position = new Vector3(x, y, z);
             }
         }
-        
+
         CameraState m_TargetCameraState = new CameraState();
         CameraState m_InterpolatingCameraState = new CameraState();
 
@@ -81,79 +81,79 @@ namespace UnityTemplateProjects
         Vector3 GetInputTranslationDirection()
         {
             Vector3 direction = new Vector3();
-            if (Keyboard.current.wKey.isPressed)
+            if (Input.GetKey(KeyCode.W))
             {
                 direction += Vector3.forward;
             }
-            if (Keyboard.current.sKey.isPressed)
+            if (Input.GetKey(KeyCode.S))
             {
                 direction += Vector3.back;
             }
-            if (Keyboard.current.aKey.isPressed)
+            if (Input.GetKey(KeyCode.A))
             {
                 direction += Vector3.left;
             }
-            if (Keyboard.current.dKey.isPressed)
+            if (Input.GetKey(KeyCode.D))
             {
                 direction += Vector3.right;
             }
-            if (Keyboard.current.qKey.isPressed)
+            if (Input.GetKey(KeyCode.Q))
             {
                 direction += Vector3.down;
             }
-            if (Keyboard.current.eKey.isPressed)
+            if (Input.GetKey(KeyCode.E))
             {
                 direction += Vector3.up;
             }
             return direction;
         }
-        
+
         void Update()
         {
             // Exit Sample  
-            if (Keyboard.current.escapeKey.isPressed)
+            if (Input.GetKey(KeyCode.Escape))
             {
                 Application.Quit();
-                #if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false; 
-                #endif
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#endif
             }
 
             // Hide and lock cursor when right mouse button pressed
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Input.GetMouseButtonDown(1))
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }
 
             // Unlock and show cursor when right mouse button released
-            if (Mouse.current.rightButton.wasReleasedThisFrame)
+            if (Input.GetMouseButtonUp(1))
             {
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
             }
 
             // Rotation
-            if (Mouse.current.rightButton.isPressed)
+            if (Input.GetMouseButton(1))
             {
-                var mouseMovement = new Vector2(Mouse.current.delta.x.ReadUnprocessedValue(), Mouse.current.delta.y.ReadUnprocessedValue() * (invertY ? 1 : -1));
-                
+                var mouseMovement = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y") * (invertY ? 1 : -1));
+
                 var mouseSensitivityFactor = mouseSensitivityCurve.Evaluate(mouseMovement.magnitude);
 
                 m_TargetCameraState.yaw += mouseMovement.x * mouseSensitivityFactor;
                 m_TargetCameraState.pitch += mouseMovement.y * mouseSensitivityFactor;
             }
-            
+
             // Translation
             var translation = GetInputTranslationDirection() * Time.deltaTime;
 
             // Speed up movement when shift key held
-            if (Keyboard.current.leftShiftKey.isPressed)
+            if (Input.GetKey(KeyCode.LeftShift))
             {
                 translation *= 10.0f;
             }
 
             // Modify movement by a boost factor (defined in Inspector and modified in play mode through the mouse scroll wheel)
-            boost += Mouse.current.scroll.y.ReadValue() * 0.2f;
+            boost += Input.mouseScrollDelta.y * 0.2f;
             translation *= Mathf.Pow(2.0f, boost);
 
             m_TargetCameraState.Translate(translation);
@@ -167,5 +167,4 @@ namespace UnityTemplateProjects
             m_InterpolatingCameraState.UpdateTransform(transform);
         }
     }
-
 }
