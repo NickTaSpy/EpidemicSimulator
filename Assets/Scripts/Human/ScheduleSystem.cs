@@ -73,7 +73,7 @@ namespace Epsim.Human
                     else if (buildingData.Location == Location.Residence && time >= humanScheduleData.WorkStart && time < humanScheduleData.WorkEnd) // Go to work.
                     {
                         destinationQueue.Enqueue(new DestinationRequest(human, new float3(workPos.x, buildingHeight, workPos.y)));
-                        buildingData.Location = Location.MovingHome;
+                        buildingData.Location = Location.MovingWork;
                     }
                     else if (buildingData.Location == Location.Work && time >= humanScheduleData.WorkEnd) // Go to residence.
                     {
@@ -81,7 +81,7 @@ namespace Epsim.Human
                         buildingData.Location = Location.MovingHome;
                     }
 
-                    //commandBuffer.RemoveComponent<HumanData>(entityInQueryIndex, human); //TEMP
+                    //commandBuffer.RemoveComponent<HumanData>(entityInQueryIndex, human); // TEMP: Use for debugging
                 })
                 .ScheduleParallel();
 

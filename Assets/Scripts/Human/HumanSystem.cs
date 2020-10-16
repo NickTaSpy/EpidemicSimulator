@@ -31,10 +31,10 @@ namespace Epsim.Human
                 .WithAll<HumanData, NavAgent>()
                 .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, in HumanBuildingData humanBuildingData) =>
                 {
-                    if (humanBuildingData.Location != Location.MovingHome)
-                    {
-                        commandBuffer.AddComponent<HumanInsideBuildingData>(entityInQueryIndex, human);
-                    }
+                    //if (humanBuildingData.Location != Location.MovingHome)
+                    //{
+                    //    commandBuffer.AddComponent<HumanInsideBuildingData>(entityInQueryIndex, human);
+                    //}
                 })
                 .ScheduleParallel();
 
