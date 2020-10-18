@@ -3,6 +3,7 @@ using Reese.Random;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -13,11 +14,12 @@ namespace Epsim.Human
 {
     public class HumanSystem : SystemBase
     {
+        private EntityQuery Query;
+
         private EntityCommandBufferSystem ECB;
 
         protected override void OnCreate()
         {
-            Enabled = false;
             ECB = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
 
@@ -25,18 +27,46 @@ namespace Epsim.Human
         {
             var commandBuffer = ECB.CreateCommandBuffer().AsParallelWriter();
 
+            var humans = Query.ToEntityArray(Allocator.TempJob);
+            var humanInBuildingDataAll = Query.ToComponentDataArray<HumanInsideBuildingData>(Allocator.TempJob);
+            //var humanDataAll = Query.ToComponentDataArray<HumanData>(Allocator.TempJob);
+
             Entities
-                .WithName("HumanMainJob")
-                .WithNone<NavNeedsDestination, HumanInsideBuildingData>()
-                .WithAll<HumanData, NavAgent>()
-                .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex, in HumanBuildingData humanBuildingData) =>
+                .WithName("CalculateContactsJob")
+                .WithStoreEntityQueryInField(ref Query)
+                .WithReadOnly(humans)
+                .WithReadOnly(humanInBuildingDataAll)
+                //.WithReadOnly(humanDataAll)
+                .WithAll<NavAgent, HumanInsideBuildingData>()
+                .WithNone<NavNeedsDestination>()
+                .ForEach((Entity human, int entityInQueryIndex, in HumanData humanData) =>
                 {
-                    //if (humanBuildingData.Location != Location.MovingHome)
-                    //{
-                    //    commandBuffer.AddComponent<HumanInsideBuildingData>(entityInQueryIndex, human);
-                    //}
+                    if (humanData.Status == Status.Infected)
+                    {
+                        var humanInsideBuildingData = humanInBuildingDataAll[entityInQueryIndex];
+
+                        for (int i = 0; i < humans.Length; i++)
+                        {
+                            if (i == entityInQueryIndex)
+                            {
+                                continue;
+                            }
+
+                            if (humanInBuildingDataAll[i].Building == humanInsideBuildingData.Building)
+                            {
+                                SetComponent(humans[i], new HumanInsideBuildingData
+                                {
+                                    Building = humanInBuildingDataAll[i].Building,
+                                    Contacts = humanInBuildingDataAll[i].Contacts + 1
+                                });
+                            }
+                        }
+                    }
                 })
-                .ScheduleParallel();
+                .WithDisposeOnCompletion(humans)
+                .WithDisposeOnCompletion(humanInBuildingDataAll)
+                //.WithDisposeOnCompletion(humanDataAll)
+                .Schedule();
 
             ECB.AddJobHandleForProducer(Dependency);
         }

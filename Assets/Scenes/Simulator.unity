@@ -1132,14 +1132,14 @@ MonoBehaviour:
       time: 0
       value: 0.5
       inSlope: 0
-      outSlope: 0
+      outSlope: 5
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0.5082909
+      value: 2.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1863,7 +1863,7 @@ PrefabInstance:
     - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0009999824
+      value: 0.00081748905
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290574951585, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}

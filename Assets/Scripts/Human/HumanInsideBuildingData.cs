@@ -9,6 +9,7 @@ namespace Epsim.Human
 {
     public struct HumanInsideBuildingData : IComponentData
     {
-
+        public int Building;
+        public int Contacts;
     }
 }
