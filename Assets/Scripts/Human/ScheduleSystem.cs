@@ -62,11 +62,7 @@ namespace Epsim.Human
                         if (housePos.x.Approx(translation.Value.x, DestinationCheckRange) && housePos.y.Approx(translation.Value.z, DestinationCheckRange)) // Arrived at residence.
                         {
                             buildingData.Location = Location.Residence;
-                            commandBuffer.AddComponent(entityInQueryIndex, human, new HumanInsideBuildingData
-                            {
-                                Building = buildingData.Residence,
-                                Contacts = 0
-                            });
+                            commandBuffer.AddComponent<HumanInBuildingData>(entityInQueryIndex, human);
                         }
                     }
                     else if (buildingData.Location == Location.MovingWork)
@@ -74,24 +70,20 @@ namespace Epsim.Human
                         if (workPos.x.Approx(translation.Value.x, DestinationCheckRange) && workPos.y.Approx(translation.Value.z, DestinationCheckRange)) // Arrived at work.
                         {
                             buildingData.Location = Location.Work;
-                            commandBuffer.AddComponent(entityInQueryIndex, human, new HumanInsideBuildingData
-                            {
-                                Building = buildingData.Work,
-                                Contacts = 0
-                            });
+                            commandBuffer.AddComponent<HumanInBuildingData>(entityInQueryIndex, human);
                         }
                     }
                     else if (buildingData.Location == Location.Residence && time >= humanScheduleData.WorkStart && time < humanScheduleData.WorkEnd) // Go to work.
                     {
                         destinationQueue.Enqueue(new DestinationRequest(human, new float3(workPos.x, buildingHeight, workPos.y)));
                         buildingData.Location = Location.MovingWork;
-                        commandBuffer.RemoveComponent<HumanInsideBuildingData>(entityInQueryIndex, human);
+                        commandBuffer.RemoveComponent<HumanInBuildingData>(entityInQueryIndex, human);
                     }
                     else if (buildingData.Location == Location.Work && time >= humanScheduleData.WorkEnd) // Go to residence.
                     {
                         destinationQueue.Enqueue(new DestinationRequest(human, new float3(housePos.x, buildingHeight, housePos.y)));
                         buildingData.Location = Location.MovingHome;
-                        commandBuffer.RemoveComponent<HumanInsideBuildingData>(entityInQueryIndex, human);
+                        commandBuffer.RemoveComponent<HumanInBuildingData>(entityInQueryIndex, human);
                     }
 
                     //commandBuffer.RemoveComponent<HumanData>(entityInQueryIndex, human); // TEMP: Use for debugging

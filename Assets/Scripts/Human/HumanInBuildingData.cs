@@ -7,9 +7,8 @@ using Unity.Entities;
 
 namespace Epsim.Human
 {
-    public struct HumanInsideBuildingData : IComponentData
+    public struct HumanInBuildingData : IComponentData
     {
-        public int Building;
-        public int Contacts;
+
     }
 }

@@ -12,6 +12,12 @@ using UnityEngine;
 
 namespace Epsim.Human
 {
+    public struct HumanInBuildingSystemData : ISystemStateComponentData
+    {
+        public int Building;
+        public int Contacts;
+    }
+
     public class HumanSystem : SystemBase
     {
         private EntityQuery Query;
@@ -26,24 +32,36 @@ namespace Epsim.Human
         protected override void OnUpdate()
         {
             var commandBuffer = ECB.CreateCommandBuffer().AsParallelWriter();
+            
+            Entities
+                .WithName("HumanEnterBuildingJob")
+                .WithAll<NavAgent, HumanData, HumanInBuildingData>()
+                .WithNone<NavNeedsDestination, HumanInBuildingSystemData>()
+                .ForEach((Entity human, int entityInQueryIndex, in HumanBuildingData humanBuildingData) =>
+                {
+                    commandBuffer.AddComponent(entityInQueryIndex, human, new HumanInBuildingSystemData
+                    {
+                        Building = humanBuildingData.Location == Location.Work ? humanBuildingData.Work : humanBuildingData.Residence
+                    });
+                })
+                .ScheduleParallel();
 
             var humans = Query.ToEntityArray(Allocator.TempJob);
-            var humanInBuildingDataAll = Query.ToComponentDataArray<HumanInsideBuildingData>(Allocator.TempJob);
+            var humanInBuildingSystemDataAll = Query.ToComponentDataArray<HumanInBuildingSystemData>(Allocator.TempJob);
             //var humanDataAll = Query.ToComponentDataArray<HumanData>(Allocator.TempJob);
 
             Entities
-                .WithName("CalculateContactsJob")
+                .WithName("HumanInBuildingJob")
                 .WithStoreEntityQueryInField(ref Query)
                 .WithReadOnly(humans)
-                .WithReadOnly(humanInBuildingDataAll)
                 //.WithReadOnly(humanDataAll)
-                .WithAll<NavAgent, HumanInsideBuildingData>()
+                .WithAll<NavAgent, HumanInBuildingData, HumanInBuildingSystemData>()
                 .WithNone<NavNeedsDestination>()
                 .ForEach((Entity human, int entityInQueryIndex, in HumanData humanData) =>
                 {
                     if (humanData.Status == Status.Infected)
                     {
-                        var humanInsideBuildingData = humanInBuildingDataAll[entityInQueryIndex];
+                        var humanInBuildingData = humanInBuildingSystemDataAll[entityInQueryIndex];
 
                         for (int i = 0; i < humans.Length; i++)
                         {
@@ -52,21 +70,35 @@ namespace Epsim.Human
                                 continue;
                             }
 
-                            if (humanInBuildingDataAll[i].Building == humanInsideBuildingData.Building)
+                            if (humanInBuildingSystemDataAll[i].Building == humanInBuildingData.Building)
                             {
-                                SetComponent(humans[i], new HumanInsideBuildingData
+                                var data = new HumanInBuildingSystemData
                                 {
-                                    Building = humanInBuildingDataAll[i].Building,
-                                    Contacts = humanInBuildingDataAll[i].Contacts + 1
-                                });
+                                    Building = humanInBuildingSystemDataAll[i].Building,
+                                    Contacts = humanInBuildingSystemDataAll[i].Contacts + 1
+                                };
+
+                                SetComponent(humans[i], data);
                             }
                         }
                     }
                 })
                 .WithDisposeOnCompletion(humans)
-                .WithDisposeOnCompletion(humanInBuildingDataAll)
+                .WithDisposeOnCompletion(humanInBuildingSystemDataAll)
                 //.WithDisposeOnCompletion(humanDataAll)
                 .Schedule();
+
+            Entities
+                .WithName("HumanExitBuildingJob")
+                .WithAll<NavAgent, HumanData>()
+                .WithNone<HumanInBuildingData>()
+                .ForEach((Entity human, int entityInQueryIndex, in HumanInBuildingSystemData data) =>
+                {
+                    commandBuffer.RemoveComponent<HumanInBuildingSystemData>(entityInQueryIndex, human);
+
+                    // Deal with data
+                })
+                .ScheduleParallel();
 
             ECB.AddJobHandleForProducer(Dependency);
         }
