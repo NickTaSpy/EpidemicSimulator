@@ -21,6 +21,7 @@ namespace Epsim.Human
     public class HumanSystem : SystemBase
     {
         private EntityQuery Query;
+        private Unity.Mathematics.Random InfectionRand;
 
         private EntityCommandBufferSystem ECB;
 
@@ -48,16 +49,15 @@ namespace Epsim.Human
 
             var humans = Query.ToEntityArray(Allocator.TempJob);
             var humanInBuildingSystemDataAll = Query.ToComponentDataArray<HumanInBuildingSystemData>(Allocator.TempJob);
-            //var humanDataAll = Query.ToComponentDataArray<HumanData>(Allocator.TempJob);
 
             Entities
                 .WithName("HumanInBuildingJob")
                 .WithStoreEntityQueryInField(ref Query)
                 .WithReadOnly(humans)
-                //.WithReadOnly(humanDataAll)
+                .WithReadOnly(humanInBuildingSystemDataAll)
                 .WithAll<NavAgent, HumanInBuildingData, HumanInBuildingSystemData>()
                 .WithNone<NavNeedsDestination>()
-                .ForEach((Entity human, int entityInQueryIndex, in HumanData humanData) =>
+                .ForEach((Entity human, int entityInQueryIndex, ref HumanData humanData) =>
                 {
                     if (humanData.Status == Status.Infected)
                     {
@@ -65,38 +65,50 @@ namespace Epsim.Human
 
                         for (int i = 0; i < humans.Length; i++)
                         {
-                            if (i == entityInQueryIndex)
+                            if (humanData.TransmissionsRemaining > 0)
+                            {
+                                break;
+                            }
+
+                            if (i == entityInQueryIndex) // Itself
                             {
                                 continue;
                             }
 
                             if (humanInBuildingSystemDataAll[i].Building == humanInBuildingData.Building)
                             {
-                                var data = new HumanInBuildingSystemData
+                                humanData.TransmissionsRemaining =- 1;
+
+                                SetComponent(humans[i], new HumanInBuildingSystemData
                                 {
                                     Building = humanInBuildingSystemDataAll[i].Building,
                                     Contacts = humanInBuildingSystemDataAll[i].Contacts + 1
-                                };
-
-                                SetComponent(humans[i], data);
+                                });
                             }
                         }
                     }
                 })
                 .WithDisposeOnCompletion(humans)
                 .WithDisposeOnCompletion(humanInBuildingSystemDataAll)
-                //.WithDisposeOnCompletion(humanDataAll)
                 .Schedule();
+
+            var infectionRand = InfectionRand;
 
             Entities
                 .WithName("HumanExitBuildingJob")
-                .WithAll<NavAgent, HumanData>()
+                .WithAll<NavAgent>()
                 .WithNone<HumanInBuildingData>()
-                .ForEach((Entity human, int entityInQueryIndex, in HumanInBuildingSystemData data) =>
+                .ForEach((Entity human, int entityInQueryIndex, ref HumanData humanData, in HumanInBuildingSystemData humanInBuildingData) =>
                 {
                     commandBuffer.RemoveComponent<HumanInBuildingSystemData>(entityInQueryIndex, human);
 
-                    // Deal with data
+                    if (humanData.Status == Status.Susceptible)
+                    {
+                        if (infectionRand.NextFloat(1f) < humanData.InfectionProbability * humanInBuildingData.Contacts)
+                        {
+                            humanData.Status = Status.Infected;
+                        }
+                    }
                 })
                 .ScheduleParallel();
 

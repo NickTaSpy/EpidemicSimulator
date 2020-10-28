@@ -2,7 +2,7 @@
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
-namespace UnityTemplateProjects
+namespace Epsim.Test
 {
     public class SimpleCameraController : MonoBehaviour
     {
