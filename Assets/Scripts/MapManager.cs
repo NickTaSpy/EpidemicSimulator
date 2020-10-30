@@ -29,6 +29,10 @@ namespace Epsim
         [SerializeField] private TMP_Text HomeWorkPairsCount;
         [SerializeField] private float MaxTravelDistance;
 
+        [SerializeField] private Material SusceptibleMaterial;
+        [SerializeField] private Material InfectedMaterial;
+        [SerializeField] private Material RecoveredMaterial;
+
         private NavMeshSurface Surface;
 
         private EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -98,6 +102,7 @@ namespace Epsim
 
                 BuildingManager.CalculateEntrances();
                 BuildingManager.UpdateBuildingCountUI();
+                InitHumanSystem();
                 EntityManager.World.GetOrCreateSystem<HumanDataAssignmentSystem>().SimProfile = ProfileManager.Profile;
                 int pop = ProfileManager.Profile.PopulationProfile.Population;
                 int pairCount = InitBuildingAssignmentSystem(pop, buildingHeight);
@@ -128,6 +133,15 @@ namespace Epsim
                 ),
                 count
             );
+        }
+
+        private void InitHumanSystem()
+        {
+            var humanSystem = EntityManager.World.GetOrCreateSystem<HumanSystem>();
+            humanSystem.SusceptibleMaterial = SusceptibleMaterial;
+            humanSystem.InfectedMaterial = InfectedMaterial;
+            humanSystem.RecoveredMaterial = RecoveredMaterial;
+            humanSystem.Enabled = true;
         }
 
         private int InitBuildingAssignmentSystem(int population, float buildingHeight)

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Rendering;
 
 namespace Epsim.Human
 {
@@ -13,7 +14,6 @@ namespace Epsim.Human
 
         private Random GenderRand = new Random();
         private Random AgeRangeRand = new Random();
-
 
         private EntityCommandBufferSystem ECB;
 
@@ -27,11 +27,13 @@ namespace Epsim.Human
         protected override void OnUpdate()
         {
             var commandBuffer = ECB.CreateCommandBuffer();
-
+            
             var simProfile = SimProfile;
             var genderRand = GenderRand;
             var ageRangeRand = AgeRangeRand;
+
             var agePercentages = simProfile.PopulationProfile.AgeDistribution.CalculatePercentagesFromRatios();
+            var infectedMaterial = World.GetOrCreateSystem<HumanSystem>().InfectedMaterial;
 
             Entities
                 .WithName("HumanDataAssignmentJob")
@@ -39,6 +41,7 @@ namespace Epsim.Human
                 .WithNone<HumanData, HumanScheduleData>()
                 .ForEach((Entity human, int entityInQueryIndex, int nativeThreadIndex) =>
                 {
+                    // Age
                     var ageProb = ageRangeRand.NextFloat(1f);
 
                     int age = -1;
@@ -56,14 +59,30 @@ namespace Epsim.Human
                         i += 1;
                     }
 
+                    // Status
+                    Status status;
+                    if (simProfile.VirusProfile.InitiallyInfected > 0)
+                    {
+                        status = Status.Infected;
+                        simProfile.VirusProfile.InitiallyInfected--;
+
+                        var renderMesh = EntityManager.GetSharedComponentData<RenderMesh>(human);
+                        renderMesh.material = infectedMaterial;
+                        commandBuffer.SetSharedComponent(human, renderMesh);
+                    }
+                    else
+                    {
+                        status = Status.Susceptible;
+                    }
+
                     commandBuffer.AddComponent(human, new HumanData
                     {
                         Male = genderRand.NextFloat(1f) < simProfile.PopulationProfile.MalePercent,
                         Age = age,
-                        InfectionProbability = 0.1f,
-                        RecoveryProbability = 0.1f,
-                        Status = Status.Susceptible,
-                        TransmissionsRemaining = 4
+                        InfectionProbability = simProfile.VirusProfile.InfectionProbability,
+                        RecoveryProbability = simProfile.VirusProfile.RecoveryProbability,
+                        Status = status,
+                        TransmissionsRemaining = (simProfile.VirusProfile.ReproductionMin + simProfile.VirusProfile.ReproductionMax) / 2
                     });
 
                     commandBuffer.AddComponent(human, new HumanScheduleData
