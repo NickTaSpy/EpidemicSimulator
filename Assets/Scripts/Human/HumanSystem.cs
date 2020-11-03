@@ -26,12 +26,15 @@ namespace Epsim.Human
 
         private EntityQuery Query;
         private Unity.Mathematics.Random InfectionRand;
+        private Unity.Mathematics.Random RecoveryRand;
 
         private EntityCommandBufferSystem ECB;
 
         protected override void OnCreate()
         {
             ECB = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+            InfectionRand.InitState();
+            RecoveryRand.InitState();
             Enabled = false;
         }
 
@@ -98,12 +101,13 @@ namespace Epsim.Human
                 .Schedule();
 
             var infectionRand = InfectionRand;
+            var recoveryRand = RecoveryRand;
 
             Entities
                 .WithName("HumanExitBuildingJob")
                 .WithAll<NavAgent>()
                 .WithNone<HumanInBuildingData>()
-                .ForEach((Entity human, int entityInQueryIndex, ref HumanData humanData, in HumanInBuildingSystemData humanInBuildingData) =>
+                .ForEach((Entity human, int entityInQueryIndex, ref HumanData humanData, in HumanBuildingData humanBuildingData, in HumanInBuildingSystemData humanInBuildingData) =>
                 {
                     commandBuffer.RemoveComponent<HumanInBuildingSystemData>(entityInQueryIndex, human);
 
@@ -115,6 +119,17 @@ namespace Epsim.Human
 
                             var renderMesh = EntityManager.GetSharedComponentData<RenderMesh>(human);
                             renderMesh.material = InfectedMaterial;
+                            commandBuffer.SetSharedComponent(entityInQueryIndex, human, renderMesh);
+                        }
+                    }
+                    else if (humanData.Status == Status.Infected && humanBuildingData.Residence == humanInBuildingData.Building)
+                    {
+                        if (recoveryRand.NextFloat(1f) < humanData.RecoveryProbability)
+                        {
+                            humanData.Status = Status.Recovered;
+
+                            var renderMesh = EntityManager.GetSharedComponentData<RenderMesh>(human);
+                            renderMesh.material = RecoveredMaterial;
                             commandBuffer.SetSharedComponent(entityInQueryIndex, human, renderMesh);
                         }
                     }

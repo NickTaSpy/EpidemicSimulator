@@ -90,7 +90,7 @@ MonoBehaviour:
       WorkStart: 8
       WorkDurationHours: 8
     VirusProfile:
-      InitiallyInfected: 10
+      InitiallyInfected: 50
       InfectionProbability: 0.1
       RecoveryProbability: 0.1
       ReproductionMin: 2

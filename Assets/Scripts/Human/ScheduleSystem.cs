@@ -14,9 +14,10 @@ namespace Epsim.Human
 {
     public class ScheduleSystem : SystemBase
     {
+        public float TimeScale = 1f;
+
         private const float DestinationCheckRange = 1.5f;
 
-        public float TimeScale = 1f;
         private DateTime DateTime;
 
         private EntityCommandBufferSystem ECB;
