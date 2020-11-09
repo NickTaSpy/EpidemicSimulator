@@ -16,9 +16,9 @@ namespace Epsim.Human
     {
         public float TimeScale = 1f;
 
-        private const float DestinationCheckRange = 1.5f;
+        public DateTime DateTime;
 
-        private DateTime DateTime;
+        private const float DestinationCheckRange = 1.5f;
 
         private EntityCommandBufferSystem ECB;
 
