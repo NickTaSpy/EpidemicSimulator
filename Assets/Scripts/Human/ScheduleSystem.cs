@@ -1,6 +1,4 @@
 ﻿using Reese.Nav;
-using Reese.Random;
-using Reese.Spawning;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,27 +12,50 @@ namespace Epsim.Human
 {
     public class ScheduleSystem : SystemBase
     {
-        public float TimeScale = 1f;
+        public float TimeScale { get; private set; } = 1800f;
 
         public DateTime DateTime;
 
         private const float DestinationCheckRange = 1.5f;
+        private const float DefaultAgentSpeed = 20f;
 
         private EntityCommandBufferSystem ECB;
+
+        private bool TimeScaleChanged = true;
+
+        public void SetTimeScale(float value)
+        {
+            TimeScale = value;
+            TimeScaleChanged = true;
+        }
 
         protected override void OnCreate()
         {
             Enabled = false;
             ECB = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+            DateTime = DateTime.Today;
         }
 
         protected override void OnStartRunning()
         {
-            DateTime = DateTime.Today.AddHours(8);
+            DateTime = DateTime.AddHours(8);
         }
 
         protected override void OnUpdate()
         {
+            if (TimeScaleChanged)
+            {
+                TimeScaleChanged = false;
+                float newSpeed = DefaultAgentSpeed * TimeScale;
+
+                Entities
+                    .ForEach((Entity human, ref NavAgent navAgent) =>
+                    {
+                        navAgent.TranslationSpeed = newSpeed;
+                    })
+                    .ScheduleParallel();
+            }
+
             var deltaTime = Time.DeltaTime;
             DateTime = DateTime.AddSeconds(deltaTime * TimeScale);
             var time = DateTime.TimeOfDay.TotalMilliseconds;

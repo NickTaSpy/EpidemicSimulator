@@ -91,8 +91,8 @@ MonoBehaviour:
       WorkDurationHours: 8
     VirusProfile:
       InitiallyInfected: 100
-      InfectionProbability: 0.1
-      RecoveryProbability: 0.1
+      InfectionProbability: 0.25
+      RecoveryProbability: 0.25
       ReproductionMin: 2
       ReproductionMax: 2
   SelectedProfile:

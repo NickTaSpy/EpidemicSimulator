@@ -103,13 +103,15 @@ namespace Epsim.Human
             var infectionRand = InfectionRand;
             var recoveryRand = RecoveryRand;
 
+            var commandBufferSerial = ECB.CreateCommandBuffer();
+
             Entities
                 .WithName("HumanExitBuildingJob")
                 .WithAll<NavAgent>()
                 .WithNone<HumanInBuildingData>()
-                .ForEach((Entity human, int entityInQueryIndex, ref HumanData humanData, in HumanBuildingData humanBuildingData, in HumanInBuildingSystemData humanInBuildingData) =>
+                .ForEach((Entity human, ref HumanData humanData, in HumanBuildingData humanBuildingData, in HumanInBuildingSystemData humanInBuildingData) =>
                 {
-                    commandBuffer.RemoveComponent<HumanInBuildingSystemData>(entityInQueryIndex, human);
+                    commandBufferSerial.RemoveComponent<HumanInBuildingSystemData>(human);
 
                     if (humanData.Status == Status.Susceptible)
                     {
@@ -119,7 +121,7 @@ namespace Epsim.Human
 
                             var renderMesh = EntityManager.GetSharedComponentData<RenderMesh>(human);
                             renderMesh.material = InfectedMaterial;
-                            commandBuffer.SetSharedComponent(entityInQueryIndex, human, renderMesh);
+                            commandBufferSerial.SetSharedComponent(human, renderMesh);
                         }
                     }
                     else if (humanData.Status == Status.Infected && humanBuildingData.Residence == humanInBuildingData.Building)
@@ -130,7 +132,7 @@ namespace Epsim.Human
 
                             var renderMesh = EntityManager.GetSharedComponentData<RenderMesh>(human);
                             renderMesh.material = RecoveredMaterial;
-                            commandBuffer.SetSharedComponent(entityInQueryIndex, human, renderMesh);
+                            commandBufferSerial.SetSharedComponent(human, renderMesh);
                         }
                     }
                 })

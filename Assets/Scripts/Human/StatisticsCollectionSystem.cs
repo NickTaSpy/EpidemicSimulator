@@ -22,8 +22,6 @@ namespace Epsim.Human
         private NativeArray<int> InfectedCounts = new NativeArray<int>(JobsUtility.MaxJobThreadCount, Allocator.Persistent);
         private NativeArray<int> RecoveredCounts = new NativeArray<int>(JobsUtility.MaxJobThreadCount, Allocator.Persistent);
 
-        public void Complete() => CompleteDependency();
-
         protected override void OnUpdate()
         {
             var susceptibleCounts = SusceptibleCounts;
@@ -55,6 +53,13 @@ namespace Epsim.Human
                     }
                 })
                 .ScheduleParallel();
+        }
+
+        protected override void OnDestroy()
+        {
+            SusceptibleCounts.Dispose();
+            InfectedCounts.Dispose();
+            RecoveredCounts.Dispose();
         }
 
         private void Reset(NativeArray<int> array)
