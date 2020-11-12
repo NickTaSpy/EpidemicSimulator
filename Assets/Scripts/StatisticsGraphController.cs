@@ -8,6 +8,7 @@ using TMPro;
 using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using XCharts;
 
 namespace Epsim
@@ -44,6 +45,11 @@ namespace Epsim
             {
                 FrameCount = 0;
                 Statistics.Update();
+            }
+
+            if (Keyboard.current.tabKey.wasPressedThisFrame)
+            {
+                LineChart.gameObject.SetActive(!LineChart.gameObject.activeSelf);
             }
         }
 

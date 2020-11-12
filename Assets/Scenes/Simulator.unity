@@ -1365,11 +1365,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3493893029714345362, guid: e4674d1871d66ac4fac24f6eb16d0659,
+    - target: {fileID: 3836008691650841485, guid: e4674d1871d66ac4fac24f6eb16d0659,
         type: 3}
-      propertyPath: FramesInterval
-      value: 60
-      objectReference: {fileID: 0}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 2007880097}
     - target: {fileID: 5635971724061217453, guid: e4674d1871d66ac4fac24f6eb16d0659,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1599,6 +1599,11 @@ PrefabInstance:
       propertyPath: HumanCountUI
       value: 
       objectReference: {fileID: 3493893029714345359}
+    - target: {fileID: 5373450620065130363, guid: 1572b3b3bf6904f4bae2c89b570bc44d,
+        type: 3}
+      propertyPath: DefaultProfile.VirusProfile.InitiallyInfected
+      value: 1000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1572b3b3bf6904f4bae2c89b570bc44d, type: 3}
 --- !u!1001 &8390251295712082308
@@ -1924,7 +1929,7 @@ PrefabInstance:
     - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00021592647
+      value: 0.00011744825
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
