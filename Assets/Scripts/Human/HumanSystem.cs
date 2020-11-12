@@ -85,7 +85,7 @@ namespace Epsim.Human
 
                             if (humanInBuildingSystemDataAll[i].Building == humanInBuildingData.Building)
                             {
-                                humanData.TransmissionsRemaining =- 1;
+                                humanData.TransmissionsRemaining -= 1;
 
                                 SetComponent(humans[i], new HumanInBuildingSystemData
                                 {

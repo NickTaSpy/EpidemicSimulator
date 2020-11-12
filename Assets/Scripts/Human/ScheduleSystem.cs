@@ -12,7 +12,7 @@ namespace Epsim.Human
 {
     public class ScheduleSystem : SystemBase
     {
-        public float TimeScale { get; private set; } = 1800f;
+        public float TimeScale { get; private set; } = 3600f;
 
         public DateTime DateTime;
 

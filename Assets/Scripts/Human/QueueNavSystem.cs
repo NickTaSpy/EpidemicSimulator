@@ -26,7 +26,7 @@ namespace Epsim.Human
     [UpdateAfter(typeof(ScheduleSystem))]
     public class QueueNavSystem : SystemBase
     {
-        private const int EntitiesPerFrame = 60;
+        private const int EntitiesPerFrame = 120;
 
         private EntityCommandBufferSystem ECB;
 
