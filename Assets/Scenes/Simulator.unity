@@ -1604,6 +1604,11 @@ PrefabInstance:
       propertyPath: DefaultProfile.VirusProfile.InitiallyInfected
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 5373450620065130363, guid: 1572b3b3bf6904f4bae2c89b570bc44d,
+        type: 3}
+      propertyPath: DefaultProfile.PopulationProfile.Population
+      value: 40000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1572b3b3bf6904f4bae2c89b570bc44d, type: 3}
 --- !u!1001 &8390251295712082308
@@ -1929,7 +1934,7 @@ PrefabInstance:
     - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00011744825
+      value: 0.0008488299
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}

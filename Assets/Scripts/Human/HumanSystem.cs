@@ -57,12 +57,14 @@ namespace Epsim.Human
 
             var humans = Query.ToEntityArray(Allocator.TempJob);
             var humanInBuildingSystemDataAll = Query.ToComponentDataArray<HumanInBuildingSystemData>(Allocator.TempJob);
+            var humanDataAll = Query.ToComponentDataArray<HumanData>(Allocator.TempJob);
 
             Entities
                 .WithName("HumanInBuildingJob")
                 .WithStoreEntityQueryInField(ref Query)
                 .WithReadOnly(humans)
                 .WithReadOnly(humanInBuildingSystemDataAll)
+                .WithReadOnly(humanDataAll)
                 .WithAll<NavAgent, HumanInBuildingData, HumanInBuildingSystemData>()
                 .WithNone<NavNeedsDestination>()
                 .ForEach((Entity human, int entityInQueryIndex, ref HumanData humanData) =>
@@ -73,12 +75,12 @@ namespace Epsim.Human
 
                         for (int i = 0; i < humans.Length; i++)
                         {
-                            if (humanData.TransmissionsRemaining > 0)
+                            if (humanData.TransmissionsRemaining == 0)
                             {
                                 break;
                             }
 
-                            if (i == entityInQueryIndex) // Itself
+                            if (i == entityInQueryIndex || humanDataAll[i].Status != Status.Susceptible)
                             {
                                 continue;
                             }
@@ -98,6 +100,7 @@ namespace Epsim.Human
                 })
                 .WithDisposeOnCompletion(humans)
                 .WithDisposeOnCompletion(humanInBuildingSystemDataAll)
+                .WithDisposeOnCompletion(humanDataAll)
                 .Schedule();
 
             var infectionRand = InfectionRand;
