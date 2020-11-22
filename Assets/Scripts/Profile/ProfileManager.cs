@@ -19,6 +19,7 @@ namespace Epsim.Profile
 
         [SerializeField] private TMP_Text HumanCountUI;
 
+        private SimProfile DefaultProfileCopy;
         private string ProfileFolder;
 
         public SimProfile Profile => SelectedProfile;
@@ -35,8 +36,14 @@ namespace Epsim.Profile
         {
             var files = Directory.GetFiles(ProfileFolder, "*.json", SearchOption.AllDirectories);
 
-            ProfilesListUI.Add("Default", () => SelectProfile(DefaultProfile)); // Load Default.
-            SelectProfile(DefaultProfile);
+            // Load default.
+            CopyDefaultProfile();
+            ProfilesListUI.Add("Default", () =>
+            {
+                CopyDefaultProfile();
+                SelectProfile(DefaultProfileCopy);
+            });
+            SelectProfile(DefaultProfileCopy);
 
             foreach (var file in files)
             {
@@ -69,6 +76,14 @@ namespace Epsim.Profile
 
             SelectedProfile.Save($"{ProfileFolder}/{ProfileName.text}.json");
             ReloadAllProfiles();
+        }
+
+        private void CopyDefaultProfile()
+        {
+            if (DefaultProfileCopy != null)
+                Destroy(DefaultProfileCopy);
+
+            DefaultProfileCopy = Instantiate(DefaultProfile);
         }
     }
 }

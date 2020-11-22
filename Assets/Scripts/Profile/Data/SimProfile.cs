@@ -9,7 +9,8 @@ using UnityEngine;
 namespace Epsim.Profile.Data
 {
     [Serializable]
-    public class SimProfile
+    [CreateAssetMenu(menuName = "Epsim/SimProfile")]
+    public class SimProfile : ScriptableObject
     {
         public string Name;
 

@@ -159,7 +159,7 @@ namespace Epsim
             for (int i = 0; i < BuildingManager.EntranceCount / 2; i++)
             {
                 houses.Add(i);
-                houseCapacity.Add(UnityEngine.Random.Range(3, 11));
+                houseCapacity.Add(UnityEngine.Random.Range(5, 11));
                 jobs.Add(BuildingManager.EntranceCount - i);
                 jobCapacity.Add(UnityEngine.Random.Range(5, 20));
             }
@@ -230,16 +230,19 @@ namespace Epsim
             }
         }
 
-        private void Shuffle<T>(INativeList<T> list) where T : struct
+        private void Shuffle<T>(INativeList<T> list, int times = 1) where T : struct
         {
-            int n = list.Length;
-            while (n > 1)
+            for (int i = 0; i < times; i++)
             {
-                n--;
-                int k = UnityEngine.Random.Range(0, n + 1);
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
+                int n = list.Length;
+                while (n > 1)
+                {
+                    n--;
+                    int k = UnityEngine.Random.Range(0, n + 1);
+                    T value = list[k];
+                    list[k] = list[n];
+                    list[n] = value;
+                }
             }
         }
 

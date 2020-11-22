@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 348e94e559739e6418537d45a6d0efbf, type: 3}
+  m_Name: DefaultSimProfile
+  m_EditorClassIdentifier: 
+  Name: Default
+  PopulationProfile:
+    Population: 10000
+    AgeDistribution:
+      Ranges:
+      - From: 0
+        To: 9
+      - From: 10
+        To: 19
+      - From: 20
+        To: 29
+      - From: 30
+        To: 39
+      - From: 40
+        To: 49
+      - From: 50
+        To: 59
+      - From: 60
+        To: 69
+      - From: 70
+        To: 100
+      Values:
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+    AgeInfectabilityModifiers:
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    - 1
+    MalePercent: 0.5
+  ScheduleProfile:
+    WorkStart: 8
+    WorkDurationHours: 8
+  VirusProfile:
+    InitiallyInfected: 1000
+    InfectionProbability: 0.25
+    RecoveryProbability: 0.1
+    ReproductionMin: 2
+    ReproductionMax: 4

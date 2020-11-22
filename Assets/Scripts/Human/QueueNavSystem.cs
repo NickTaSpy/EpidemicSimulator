@@ -70,6 +70,11 @@ namespace Epsim.Human
             handles.Dispose();
         }
 
+        protected override void OnDestroy()
+        {
+            Queue.Dispose();
+        }
+
         public NativeQueue<DestinationRequest>.ParallelWriter GetParallelQueue() => Queue.AsParallelWriter();
     }
 }

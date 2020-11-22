@@ -1599,16 +1599,6 @@ PrefabInstance:
       propertyPath: HumanCountUI
       value: 
       objectReference: {fileID: 3493893029714345359}
-    - target: {fileID: 5373450620065130363, guid: 1572b3b3bf6904f4bae2c89b570bc44d,
-        type: 3}
-      propertyPath: DefaultProfile.VirusProfile.InitiallyInfected
-      value: 1000
-      objectReference: {fileID: 0}
-    - target: {fileID: 5373450620065130363, guid: 1572b3b3bf6904f4bae2c89b570bc44d,
-        type: 3}
-      propertyPath: DefaultProfile.PopulationProfile.Population
-      value: 40000
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1572b3b3bf6904f4bae2c89b570bc44d, type: 3}
 --- !u!1001 &8390251295712082308
@@ -1841,20 +1831,15 @@ PrefabInstance:
       propertyPath: MapManager
       value: 
       objectReference: {fileID: 615845530}
-    - target: {fileID: 8692944289214672041, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
+    - target: {fileID: 8692944289214672039, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
+      propertyPath: ProfileManager
+      value: 
+      objectReference: {fileID: 1562403627}
     - target: {fileID: 8692944289214672042, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_Name
       value: UI
-      objectReference: {fileID: 0}
-    - target: {fileID: 8692944289214672042, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8692944289236424917, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
@@ -1934,12 +1919,7 @@ PrefabInstance:
     - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0008488299
-      objectReference: {fileID: 0}
-    - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -0.000018600731
+      value: 0.000032430038
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290574951585, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
@@ -1984,11 +1964,6 @@ PrefabInstance:
     - target: {fileID: 8692944290784520097, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8692944290784520097, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
-        type: 3}
-      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290786359322, guid: e4e8a127b8d3d634b9e2c189e84f98bc,

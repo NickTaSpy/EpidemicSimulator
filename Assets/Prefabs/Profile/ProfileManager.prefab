@@ -45,73 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProfilesListUI: {fileID: 0}
   ProfileUI: {fileID: 0}
-  DefaultProfile:
-    Name: Default
-    PopulationProfile:
-      Population: 40000
-      AgeDistribution:
-        Ranges:
-        - From: 0
-          To: 9
-        - From: 10
-          To: 19
-        - From: 20
-          To: 29
-        - From: 30
-          To: 39
-        - From: 40
-          To: 49
-        - From: 50
-          To: 59
-        - From: 60
-          To: 69
-        - From: 70
-          To: 79
-        Values:
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-      AgeInfectabilityModifiers:
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      MalePercent: 0.5
-    ScheduleProfile:
-      WorkStart: 8
-      WorkDurationHours: 8
-    VirusProfile:
-      InitiallyInfected: 100
-      InfectionProbability: 0.25
-      RecoveryProbability: 0.25
-      ReproductionMin: 2
-      ReproductionMax: 2
-  SelectedProfile:
-    Name: 
-    PopulationProfile:
-      Population: 0
-      AgeDistribution:
-        Ranges: []
-        Values: []
-      AgeInfectabilityModifiers: []
-      MalePercent: 0
-    ScheduleProfile:
-      WorkStart: 0
-      WorkDurationHours: 0
-    VirusProfile:
-      InitiallyInfected: 0
-      InfectionProbability: 0
-      RecoveryProbability: 0
-      ReproductionMin: 0
-      ReproductionMax: 0
+  DefaultProfile: {fileID: 11400000, guid: 377d8ed5e46ecdb43bc84af76527d2ea, type: 2}
+  SelectedProfile: {fileID: 0}
   ProfileName: {fileID: 0}
   HumanCountUI: {fileID: 0}

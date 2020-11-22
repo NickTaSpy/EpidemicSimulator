@@ -34,6 +34,7 @@ namespace Epsim.Profile
         [SerializeField] private TMP_InputField ReproductionMax;
 
         [SerializeField] private MapManager MapManager;
+        [SerializeField] private ProfileManager ProfileManager;
 
         public void OnSimulate()
         {
@@ -49,8 +50,16 @@ namespace Epsim.Profile
 
             for (int i = 0; i < AgeDistribution.Length; i++)
             {
+                int listeners = AgeDistribution[i].RatioSlider.onValueChanged.GetPersistentEventCount();
+
+                for (int j = 0; j < listeners; j++)
+                    AgeDistribution[i].RatioSlider.onValueChanged.SetPersistentListenerState(j, UnityEventCallState.Off);
+
                 AgeDistribution[i].RatioSlider.value = profile.PopulationProfile.AgeDistribution.Values[i];
-                AgeDistribution[i].Modifier.text = profile.PopulationProfile.AgeInfectabilityModifiers[i].ToString();
+                AgeDistribution[i].Modifier.text = profile.PopulationProfile.AgeInfectabilityModifiers[i].ToString(CultureInfo.InvariantCulture);
+
+                for (int j = 0; j < listeners; j++)
+                    AgeDistribution[i].RatioSlider.onValueChanged.SetPersistentListenerState(j, UnityEventCallState.RuntimeOnly);
             }
             OnAgeDistributionChanged();
 
@@ -69,7 +78,7 @@ namespace Epsim.Profile
         // Population
         public void OnPopulationChanged()
         {
-            ClampField(Population, 3000, 1, int.MaxValue);
+            ProfileManager.Profile.PopulationProfile.Population = ClampField(Population, 3000, 1, int.MaxValue);
         }
 
         public void OnAgeDistributionChanged()
@@ -79,6 +88,7 @@ namespace Epsim.Profile
             for (int i = 0; i < AgeDistribution.Length; i++)
             {
                 AgeDistribution[i].Text.text = percentages[i].ToString("P2", CultureInfo.InvariantCulture);
+                ProfileManager.Profile.PopulationProfile.AgeDistribution.Values[i] = percentages[i];
             }
         }
 
@@ -86,40 +96,44 @@ namespace Epsim.Profile
         {
             for (int i = 0; i < AgeDistribution.Length; i++)
             {
-                ClampField(AgeDistribution[i].Modifier, 1f, 0.001f, 100f);
+                ProfileManager.Profile.PopulationProfile.AgeInfectabilityModifiers[i] = ClampField(AgeDistribution[i].Modifier, 1f, 0.001f, 100f);
             }
         }
 
         // Virus
         public void OnInitiallyInfectedChanged()
         {
-            ClampField(InitiallyInfected, 10, 1, int.Parse(Population.text));
+            ProfileManager.Profile.VirusProfile.InitiallyInfected = ClampField(InitiallyInfected, 10, 1, int.Parse(Population.text));
         }
 
         public void OnInfectionProbabilityChanged()
         {
-            ClampField(InfectionProbability, 0.1f, 0.01f, 1f);
+            ProfileManager.Profile.VirusProfile.InfectionProbability = ClampField(InfectionProbability, 0.1f, 0.01f, 1f);
         }
 
         public void OnRecoveryProbabilityChanged()
         {
-            ClampField(RecoveryProbability, 0.1f, 0.01f, 1f);
+            ProfileManager.Profile.VirusProfile.RecoveryProbability = ClampField(RecoveryProbability, 0.1f, 0.01f, 1f);
         }
 
         public void OnReproductionMinChanged()
         {
             int max = int.Parse(ReproductionMax.text);
-            ClampField(ReproductionMin, max, 0, max);
+            ProfileManager.Profile.VirusProfile.ReproductionMin = ClampField(ReproductionMin, max, 0, max);
         }
 
         public void OnReproductionMaxChanged()
         {
             int min = int.Parse(ReproductionMin.text);
-            ClampField(ReproductionMax, min, min, int.MaxValue);
+            ProfileManager.Profile.VirusProfile.ReproductionMax = ClampField(ReproductionMax, min, min, int.MaxValue);
         }
 
         // Helpers
-        private bool ClampField<T>(TMP_InputField field, T defaultValue, T min, T max) where T : struct, IComparable, IConvertible, IEquatable<T>
+        /// <summary>
+        /// Clamps a UI field.
+        /// </summary>
+        /// <returns>The value that was assigned to the UI Input Field</returns>
+        private T ClampField<T>(TMP_InputField field, T defaultValue, T min, T max) where T : struct, IComparable, IConvertible, IEquatable<T>
         {
             T value;
 
@@ -130,7 +144,7 @@ namespace Epsim.Profile
             catch (Exception ex) when (ex is InvalidCastException || ex is OverflowException)
             {
                 field.text = defaultValue.ToString(CultureInfo.InvariantCulture);
-                return false;
+                return defaultValue;
             }
 
             if (value.CompareTo(min) < 0)
@@ -143,7 +157,7 @@ namespace Epsim.Profile
             }
 
             field.text = value.ToString(CultureInfo.InvariantCulture);
-            return true;
+            return value;
         }
 
         private float[] CalculatePercentagesFromRatios(float[] ratios)
