@@ -12,9 +12,13 @@ using UnityEngine.InputSystem;
 
 namespace Epsim
 {
-    public class TimescaleController : MonoBehaviour
+    public class SimControls : MonoBehaviour
     {
-        [SerializeField] TMP_Text TimeScale;
+        [SerializeField] TMP_Text TimeScaleText;
+
+        [SerializeField] Material BuildingMaterial;
+
+        private int BuildingOpacityID;
 
         private EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
 
@@ -23,27 +27,41 @@ namespace Epsim
         private void Awake()
         {
             ScheduleSystem = EntityManager.World.GetOrCreateSystem<ScheduleSystem>();
-            UpdateText();
+            UpdateTimeScaleText();
+
+            BuildingOpacityID = Shader.PropertyToID("_BuildingOpacity");
         }
 
         private void Update()
         {
+            // TimeScale
             if (Keyboard.current.equalsKey.wasPressedThisFrame || Keyboard.current.numpadPlusKey.wasPressedThisFrame)
             {
                 ScheduleSystem.SetTimeScale(Mathf.Clamp(ScheduleSystem.TimeScale * 2, 1f, 14400f));
-                UpdateText();
+                UpdateTimeScaleText();
             }
 
             if (Keyboard.current.minusKey.wasPressedThisFrame || Keyboard.current.numpadMinusKey.wasPressedThisFrame)
             {
                 ScheduleSystem.SetTimeScale(Mathf.Clamp(ScheduleSystem.TimeScale / 2, 1f, 14400f));
-                UpdateText();
+                UpdateTimeScaleText();
+            }
+
+            // Building opacity
+            if (Keyboard.current.zKey.wasPressedThisFrame)
+            {
+                BuildingMaterial.SetFloat(BuildingOpacityID, Mathf.Clamp(BuildingMaterial.GetFloat(BuildingOpacityID) - 0.5f, 0f, 1f));
+            }
+
+            if (Keyboard.current.xKey.wasPressedThisFrame)
+            {
+                BuildingMaterial.SetFloat(BuildingOpacityID, Mathf.Clamp(BuildingMaterial.GetFloat(BuildingOpacityID) + 0.5f, 0f, 1f));
             }
         }
 
-        private void UpdateText()
+        private void UpdateTimeScaleText()
         {
-            TimeScale.text = ScheduleSystem.TimeScale.ToString(CultureInfo.InvariantCulture);
+            TimeScaleText.text = ScheduleSystem.TimeScale.ToString(CultureInfo.InvariantCulture) + "x";
         }
     }
 }
