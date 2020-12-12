@@ -17,7 +17,7 @@ namespace Epsim.Human
         public DateTime DateTime;
 
         private const float DestinationCheckRange = 2f;
-        private const float DefaultAgentSpeed = 20f;
+        private const float DefaultAgentSpeed = 5f;
 
         private EntityCommandBufferSystem ECB;
 
