@@ -36,10 +36,50 @@ namespace Epsim.Profile
         [SerializeField] private MapManager MapManager;
         [SerializeField] private ProfileManager ProfileManager;
 
+        // Generic
+        [SerializeField] private TMP_InputField LocationX;
+        [SerializeField] private TMP_InputField LocationY;
+
+        [SerializeField] private GameObject SimUI;
+
+        private void Awake()
+        {
+            // London, UK
+            //LocationX.text = 51.5077456.ToString(CultureInfo.InvariantCulture);
+            //LocationY.text = (-0.1279042).ToString(CultureInfo.InvariantCulture);
+
+            // Vancouver, CA
+            LocationX.text = 49.282222.ToString(CultureInfo.InvariantCulture);
+            LocationY.text = (-123.124390).ToString(CultureInfo.InvariantCulture);
+        }
+
         public void OnSimulate()
         {
-            //MapManager.StartNewMap(new Mapbox.Utils.Vector2d(51.5077456, -0.1279042), 16); // London, UK
-            MapManager.StartNewMap(new Mapbox.Utils.Vector2d(49.282222, -123.124390), 16); // Vancouver, CA
+            LocationX.text = LocationX.text.Replace(',', '.');
+            LocationY.text = LocationY.text.Replace(',', '.');
+
+            if (!double.TryParse(LocationX.text, NumberStyles.Float, CultureInfo.InvariantCulture, out var x))
+            {
+                Debug.Log("Failed to parse Location X", this);
+                LocationX.image.color = new Color32(255, 175, 175, 255);
+                return;
+            }
+
+            LocationX.image.color = Color.white;
+
+            if (!double.TryParse(LocationY.text, NumberStyles.Float, CultureInfo.InvariantCulture, out var y))
+            {
+                Debug.Log("Failed to parse Location Y", this);
+                LocationY.image.color = new Color32(255, 175, 175, 255);
+                return;
+            }
+
+            LocationY.image.color = Color.white;
+
+            SimUI.SetActive(true);
+            gameObject.SetActive(false);
+
+            MapManager.StartNewMap(new Mapbox.Utils.Vector2d(x, y), 16);
         }
 
         public void UpdateProfile(SimProfile profile)
