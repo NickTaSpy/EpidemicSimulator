@@ -55,26 +55,10 @@ namespace Epsim.Profile
 
         public void OnSimulate()
         {
-            LocationX.text = LocationX.text.Replace(',', '.');
-            LocationY.text = LocationY.text.Replace(',', '.');
-
-            if (!double.TryParse(LocationX.text, NumberStyles.Float, CultureInfo.InvariantCulture, out var x))
+            if (!ValidateLocation(out var x, out var y))
             {
-                Debug.Log("Failed to parse Location X", this);
-                LocationX.image.color = new Color32(255, 175, 175, 255);
                 return;
             }
-
-            LocationX.image.color = Color.white;
-
-            if (!double.TryParse(LocationY.text, NumberStyles.Float, CultureInfo.InvariantCulture, out var y))
-            {
-                Debug.Log("Failed to parse Location Y", this);
-                LocationY.image.color = new Color32(255, 175, 175, 255);
-                return;
-            }
-
-            LocationY.image.color = Color.white;
 
             SimUI.SetActive(true);
             gameObject.SetActive(false);
@@ -169,6 +153,38 @@ namespace Epsim.Profile
         }
 
         // Helpers
+        private bool ValidateLocation(out double x, out double y)
+        {
+            bool valid = true;
+
+            LocationX.text = LocationX.text.Replace(',', '.');
+            LocationY.text = LocationY.text.Replace(',', '.');
+
+            if (!double.TryParse(LocationX.text, NumberStyles.Float, CultureInfo.InvariantCulture, out x))
+            {
+                Debug.Log("Failed to parse Location X", this);
+                LocationX.image.color = new Color32(255, 175, 175, 255);
+                valid = false;
+            }
+            else
+            {
+                LocationX.image.color = Color.white;
+            }            
+
+            if (!double.TryParse(LocationY.text, NumberStyles.Float, CultureInfo.InvariantCulture, out y))
+            {
+                Debug.Log("Failed to parse Location Y", this);
+                LocationY.image.color = new Color32(255, 175, 175, 255);
+                valid = false;
+            }
+            else
+            {
+                LocationY.image.color = Color.white;
+            }
+            
+            return valid;
+        }
+
         /// <summary>
         /// Clamps a UI field.
         /// </summary>
