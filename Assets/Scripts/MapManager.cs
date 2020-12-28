@@ -33,6 +33,11 @@ namespace Epsim
         [SerializeField] private Material InfectedMaterial;
         [SerializeField] private Material RecoveredMaterial;
 
+        [SerializeField] private int HouseCapacityMin = 5;
+        [SerializeField] private int HouseCapacityMax = 11;
+        [SerializeField] private int JobCapacityMin = 5;
+        [SerializeField] private int JobCapacityMax = 20;
+
         private NavMeshSurface Surface;
 
         private EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -159,9 +164,9 @@ namespace Epsim
             for (int i = 0; i < BuildingManager.EntranceCount / 2; i++)
             {
                 houses.Add(i);
-                houseCapacity.Add(UnityEngine.Random.Range(5, 11));
+                houseCapacity.Add(UnityEngine.Random.Range(HouseCapacityMin, HouseCapacityMax));
                 jobs.Add(BuildingManager.EntranceCount - i);
-                jobCapacity.Add(UnityEngine.Random.Range(5, 20));
+                jobCapacity.Add(UnityEngine.Random.Range(JobCapacityMin, JobCapacityMax));
             }
 
             var pairs = new NativeList<int2>(population, Allocator.Persistent);

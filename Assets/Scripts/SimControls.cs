@@ -61,7 +61,7 @@ namespace Epsim
 
         private void UpdateTimeScaleText()
         {
-            TimeScaleText.text = ScheduleSystem.TimeScale.ToString(CultureInfo.InvariantCulture) + "x";
+            TimeScaleText.text = ScheduleSystem.TimeScale.ToString("F0", CultureInfo.InvariantCulture) + "x";
         }
     }
 }
