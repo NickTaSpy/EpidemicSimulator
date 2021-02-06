@@ -1373,6 +1373,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -289.0998
       objectReference: {fileID: 0}
+    - target: {fileID: 65496673, guid: e4674d1871d66ac4fac24f6eb16d0659, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 179
+      objectReference: {fileID: 0}
+    - target: {fileID: 65496673, guid: e4674d1871d66ac4fac24f6eb16d0659, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 67.5925
+      objectReference: {fileID: 0}
     - target: {fileID: 66610894, guid: e4674d1871d66ac4fac24f6eb16d0659, type: 3}
       propertyPath: m_LocalScale.x
       value: 0
@@ -2319,6 +2327,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: UI
       objectReference: {fileID: 0}
+    - target: {fileID: 8692944289214672042, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8692944289269583024, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -2392,7 +2405,7 @@ PrefabInstance:
     - target: {fileID: 8692944290409061728, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0008890004
+      value: 0.00062276487
       objectReference: {fileID: 0}
     - target: {fileID: 8692944290574951585, guid: e4e8a127b8d3d634b9e2c189e84f98bc,
         type: 3}
@@ -2496,22 +2509,22 @@ PrefabInstance:
     - target: {fileID: 8939792508510438568, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
         type: 3}
       propertyPath: HouseCapacityMin
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8939792508510438568, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
-        type: 3}
-      propertyPath: HouseCapacityMax
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 8939792508510438568, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
         type: 3}
+      propertyPath: HouseCapacityMax
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8939792508510438568, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
+        type: 3}
       propertyPath: JobCapacityMin
-      value: 20
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 8939792508510438568, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
         type: 3}
       propertyPath: JobCapacityMax
-      value: 60
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 8939792508510438569, guid: 48b470ca2962b2f4f9d9ca7b244a3991,
         type: 3}
