@@ -10,6 +10,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using Unity.Entities.UniversalDelegates;
 using System.Globalization;
+using System.Threading;
 
 namespace Epsim.Profile
 {
@@ -44,6 +45,9 @@ namespace Epsim.Profile
 
         private void Awake()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+
             // London, UK
             //LocationX.text = 51.5077456.ToString(CultureInfo.InvariantCulture);
             //LocationY.text = (-0.1279042).ToString(CultureInfo.InvariantCulture);
@@ -195,7 +199,7 @@ namespace Epsim.Profile
 
             try
             {
-                value = (T)Convert.ChangeType(field.text, typeof(T), CultureInfo.InvariantCulture);
+                value = (T)Convert.ChangeType(field.text.Replace(',', '.'), typeof(T), CultureInfo.InvariantCulture);
             }
             catch (Exception ex) when (ex is InvalidCastException || ex is OverflowException)
             {
