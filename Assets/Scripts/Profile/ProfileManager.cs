@@ -74,7 +74,7 @@ namespace Epsim.Profile
                 return;
             }
 
-            SelectedProfile.name = ProfileName.text;
+            SelectedProfile.Name = ProfileName.text;
             SelectedProfile.Save($"{ProfileFolder}/{ProfileName.text}.json");
             ReloadAllProfiles();
         }
