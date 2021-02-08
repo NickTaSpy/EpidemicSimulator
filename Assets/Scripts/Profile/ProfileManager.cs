@@ -62,9 +62,9 @@ namespace Epsim.Profile
         public void SelectProfile(SimProfile profile)
         {
             SelectedProfile = profile;
-            ProfileUI.UpdateProfile(profile);
             HumanCountUI.text = profile.PopulationProfile.Population.ToString();
             ProfileName.text = profile.Name;
+            ProfileUI.UpdateProfile(profile);
         }
 
         public void SaveProfile()

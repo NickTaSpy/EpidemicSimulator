@@ -1,0 +1,74 @@
+﻿{
+    "Name": "scenario1",
+    "PopulationProfile": {
+        "Population": 50000,
+        "AgeDistribution": {
+            "Ranges": [
+                {
+                    "From": 0,
+                    "To": 9
+                },
+                {
+                    "From": 10,
+                    "To": 19
+                },
+                {
+                    "From": 20,
+                    "To": 29
+                },
+                {
+                    "From": 30,
+                    "To": 39
+                },
+                {
+                    "From": 40,
+                    "To": 49
+                },
+                {
+                    "From": 50,
+                    "To": 59
+                },
+                {
+                    "From": 60,
+                    "To": 69
+                },
+                {
+                    "From": 70,
+                    "To": 100
+                }
+            ],
+            "Values": [
+                0.125,
+                0.125,
+                0.125,
+                0.125,
+                0.125,
+                0.125,
+                0.125,
+                0.125
+            ]
+        },
+        "AgeInfectabilityModifiers": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "MalePercent": 0.5
+    },
+    "ScheduleProfile": {
+        "WorkStart": 8,
+        "WorkDurationHours": 8
+    },
+    "VirusProfile": {
+        "InitiallyInfected": 1000,
+        "InfectionProbability": 0.10000000149011612,
+        "RecoveryProbability": 0.25,
+        "ReproductionMin": 1,
+        "ReproductionMax": 5
+    }
+}
